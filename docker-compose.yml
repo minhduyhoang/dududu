@@ -1,0 +1,17 @@
+version: '3.5'
+services:
+  app:
+    container_name: '${CONTAINER_NAME}'
+    restart: on-failure
+    build: .
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    command: >
+      sh -c "npm install && npm run start:dev"
+    ports:
+      - '${M_PORT}:${PORT}'
+
+networks:
+  default:
+    name: '${NETWORK_NAME}'

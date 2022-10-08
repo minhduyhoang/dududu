@@ -1,0 +1,5 @@
+{
+  "401": "Upload failed",
+  "402": "Delete failed",
+  "403": "Only image files are allowed"
+}

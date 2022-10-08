@@ -1,0 +1,28 @@
+version: '3.2'
+services:
+  postgres:
+    image: postgres
+    container_name: dududu-db
+    restart: always
+    environment:
+      POSTGRES_DB: '${POSTGRES_DB}'
+      POSTGRES_USER: '${POSTGRES_USER}'
+      POSTGRES_PASSWORD: '${POSTGRES_PASSWORD}'
+    ports:
+      - '${POSTGRES_PORT}:5432'
+  redis:
+    container_name: dududu-redis
+    restart: on-failure
+    image: redis:6.0.8
+    ports:
+      - '${REDIS_PORT}:6379'
+  rabbitmq:
+    container_name: dududu-rabbitmq
+    restart: on-failure
+    image: rabbitmq:3-management
+    ports:
+      - '${RABBIT_UI_PORT}:15672'
+      - '${RABBIT_API_PORT}:5672'
+networks:
+  default:
+    name: '${NETWORK_NAME}'

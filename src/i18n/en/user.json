@@ -1,0 +1,8 @@
+{
+    "101": "User id: {id} not found",
+    "102": "This account has not been registered",
+    "103": "This account has been deactivated",
+    "104": "Password does not match",
+    "105": "This email has been taken",
+    "106": "This phone number has been taken"
+}

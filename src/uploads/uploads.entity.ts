@@ -1,0 +1,22 @@
+import { BaseEntityCustom } from 'src/utils/entity/BaseEntity';
+import { Column, Entity, Index } from 'typeorm';
+import { UploadStatus } from './uploads.constant';
+
+@Entity({ name: 'uploads'})
+export class Uploads extends BaseEntityCustom {
+  @Index()
+  @Column({ type: 'enum', enum: UploadStatus, default: UploadStatus.Active })
+  status: UploadStatus;
+
+  @Column('text', { nullable: true })
+  url: string;
+
+  @Column('text', { nullable: true })
+  key: string;
+
+  @Column('text', { nullable: true })
+  name: string;
+
+  @Column('text', { nullable: true })
+  fileType: string;
+}
