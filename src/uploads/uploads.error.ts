@@ -1,4 +1,4 @@
-import { UPLOAD_ERROR } from '../utils/error/code.error';
+import { UPLOAD_ERROR_CODE } from '../utils/error/code.error';
 import { ErrorResponse } from '../utils/interface/response.interface';
 
 class UploadsError extends ErrorResponse {
@@ -7,23 +7,23 @@ class UploadsError extends ErrorResponse {
   }
 
   uploadFailed() {
-    return this.response(UPLOAD_ERROR.CODE + 1, UPLOAD_ERROR.FILE);
+    return this.response(UPLOAD_ERROR_CODE + 1, 'upload');
   }
 
   deleteFailed() {
-    return this.response(UPLOAD_ERROR.CODE + 2, UPLOAD_ERROR.FILE);
+    return this.response(UPLOAD_ERROR_CODE + 2, 'upload');
   }
 
   onlyImagesAllowed() {
-    return this.response(UPLOAD_ERROR.CODE + 3, UPLOAD_ERROR.FILE);
+    return this.response(UPLOAD_ERROR_CODE + 3, 'upload');
   }
 
   fileUploadIsEmpty() {
-    return this.response(UPLOAD_ERROR.CODE + 5, UPLOAD_ERROR.FILE);
+    return this.response(UPLOAD_ERROR_CODE + 5, 'upload');
   }
 
   notFound() {
-    return this.response(UPLOAD_ERROR.CODE + 6, UPLOAD_ERROR.FILE);
+    return this.response(UPLOAD_ERROR_CODE + 6, 'upload');
   }
 }
 

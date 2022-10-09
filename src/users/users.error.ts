@@ -1,4 +1,4 @@
-import { USER_ERROR } from 'src/utils/error/code.error';
+import { USER_ERROR_CODE } from 'src/utils/error/code.error';
 import { ErrorResponse } from '../utils/interface/common.interface';
 
 class UsersError extends ErrorResponse {
@@ -7,29 +7,28 @@ class UsersError extends ErrorResponse {
   }
 
   userNotFound(data?: any) {
-    return this.response(USER_ERROR.CODE + 1, USER_ERROR.FILE, data);
+    return this.response(USER_ERROR_CODE + 1, 'user', data);
   }
 
   accountNotExist() {
-    return this.response(USER_ERROR.CODE + 2, USER_ERROR.FILE);
+    return this.response(USER_ERROR_CODE + 2, 'user');
   }
 
   accountInActive() {
-    return this.response(USER_ERROR.CODE + 3, USER_ERROR.FILE);
+    return this.response(USER_ERROR_CODE + 3, 'user');
   }
 
   incorrectPassword() {
-    return this.response(USER_ERROR.CODE + 4, USER_ERROR.FILE);
+    return this.response(USER_ERROR_CODE + 4, 'user');
   }
 
   emailAlreadyExist() {
-    return this.response(USER_ERROR.CODE + 5, USER_ERROR.FILE);
+    return this.response(USER_ERROR_CODE + 5, 'user');
   }
 
   phoneNumberAlreadyExist() {
-    return this.response(USER_ERROR.CODE + 6, USER_ERROR.FILE);
+    return this.response(USER_ERROR_CODE + 6, 'user');
   }
-
 }
 
 export const UsersErrorMessage = new UsersError({});

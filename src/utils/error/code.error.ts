@@ -1,29 +1,11 @@
-export const COMMON_ERROR = {
-  CODE: 0,
-  FILE: 'common',
-};
+export const COMMON_ERROR_CODE = 0;
 
-export const USER_ERROR = {
-  CODE: 100,
-  FILE: 'user',
-};
+export const USER_ERROR_CODE = 100;
 
-export const AUTH_ERROR = {
-  CODE: 200,
-  FILE: 'auth',
-};
+export const AUTH_ERROR_CODE = 200;
 
-export const SESSION_ERROR = {
-  CODE: 300,
-  FILE: 'session',
-};
+export const SESSION_ERROR_CODE = 300;
 
-export const AWS_ERROR = {
-  CODE: 400,
-  FILE: 'aws',
-};
+export const AWS_ERROR_CODE = 400;
 
-export const UPLOAD_ERROR = {
-  CODE: 500,
-  FILE: 'upload',
-};
+export const UPLOAD_ERROR_CODE = 500;

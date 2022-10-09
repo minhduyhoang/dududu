@@ -1,4 +1,4 @@
-import { AUTH_ERROR } from 'src/utils/error/code.error';
+import { AUTH_ERROR_CODE } from 'src/utils/error/code.error';
 import { ErrorResponse } from '../utils/interface/common.interface';
 
 class AuthError extends ErrorResponse {
@@ -7,23 +7,23 @@ class AuthError extends ErrorResponse {
   }
 
   sessionExpired() {
-    return this.response(AUTH_ERROR.CODE + 1, AUTH_ERROR.FILE);
+    return this.response(AUTH_ERROR_CODE + 1, 'auth');
   }
 
   invalidAccessToken() {
-    return this.response(AUTH_ERROR.CODE + 2, AUTH_ERROR.FILE);
+    return this.response(AUTH_ERROR_CODE + 2, 'auth');
   }
 
   invalidRefreshToken() {
-    return this.response(AUTH_ERROR.CODE + 3, AUTH_ERROR.FILE);
+    return this.response(AUTH_ERROR_CODE + 3, 'auth');
   }
 
   unauthorized() {
-    return this.response(AUTH_ERROR.CODE + 4, AUTH_ERROR.FILE);
+    return this.response(AUTH_ERROR_CODE + 4, 'auth');
   }
 
   forbidden() {
-    return this.response(AUTH_ERROR.CODE + 5, AUTH_ERROR.FILE);
+    return this.response(AUTH_ERROR_CODE + 5, 'auth');
   }
 }
 

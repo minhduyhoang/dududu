@@ -1,4 +1,4 @@
-import { AWS_ERROR } from '../utils/error/code.error';
+import { AWS_ERROR_CODE } from '../utils/error/code.error';
 import { ErrorResponse } from '../utils/interface/response.interface';
 
 class AWSError extends ErrorResponse {
@@ -7,15 +7,15 @@ class AWSError extends ErrorResponse {
   }
 
   uploadFailed() {
-    return this.response(AWS_ERROR.CODE + 1, AWS_ERROR.FILE);
+    return this.response(AWS_ERROR_CODE + 1, 'aws');
   }
 
   deleteFailed() {
-    return this.response(AWS_ERROR.CODE + 2, AWS_ERROR.FILE);
+    return this.response(AWS_ERROR_CODE + 2, 'aws');
   }
 
   onlyImagesAllowed() {
-    return this.response(AWS_ERROR.CODE + 3, AWS_ERROR.FILE);
+    return this.response(AWS_ERROR_CODE + 3, 'aws');
   }
 }
 

@@ -1,4 +1,4 @@
-import { COMMON_ERROR } from 'src/utils/error/code.error';
+import { COMMON_ERROR_CODE } from 'src/utils/error/code.error';
 import { ErrorResponse } from '../interface/response.interface';
 
 class CommonError extends ErrorResponse {
@@ -7,7 +7,7 @@ class CommonError extends ErrorResponse {
   }
 
   timeInvalid() {
-    return this.response(COMMON_ERROR.CODE + 1, COMMON_ERROR.FILE);
+    return this.response(COMMON_ERROR_CODE + 1, 'common');
   }
 }
 
