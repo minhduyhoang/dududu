@@ -1,11 +1,11 @@
-import { UserRole } from 'src/users/users.constant';
-import { Language } from '../constant/language.constant';
+import { USER_ROLE } from 'src/users/users.constant';
+import { LANGUAGE } from '../constant/constant';
 
 export interface IReqUser {
   userId: number;
   sessionId: number;
-  role: UserRole;
-  language: Language;
+  role: USER_ROLE;
+  language: LANGUAGE;
 }
 
 export interface IRequest {

@@ -44,8 +44,4 @@ export class KeywordDto {
   @IsOptional()
   @MinLength(1)
   keySearch: string;
-
-  @IsString()
-  @IsOptional()
-  dateFilterField: string;
 }

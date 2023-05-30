@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Post, Put, Request, UseGuards } from '@nestjs/common';
 import { Auth } from 'src/auth/decorator/auth.decorator';
-import { UserLoginDto, UserLoginSNSDto, UserRegisterDto } from '../users/users.dto';
+import { UserLoginDto, UserLoginSNSDto, UserRegisterDto } from '../users/dto/user.dto';
 import { IRequest } from '../utils/interface/common.interface';
 import { AuthService } from './auth.service';
 import { JwtRefreshTokenGuard } from './guard/jwt-refresh-token.guard';
@@ -36,5 +36,4 @@ export class AuthController {
   async accessToken(@Request() req: IRequest) {
     return this.authService.accessToken(req.user);
   }
-
 }

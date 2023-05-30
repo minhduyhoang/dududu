@@ -1,9 +1,9 @@
 import { IsString, IsNotEmpty, IsIn } from 'class-validator';
-import { Language } from '../utils/constant/language.constant';
+import { LANGUAGE } from '../../utils/constant/constant';
 
 export class ChangeLanguageDto {
   @IsString()
   @IsNotEmpty()
-  @IsIn(Object.values(Language))
-  language: Language;
+  @IsIn(Object.values(LANGUAGE))
+  language: LANGUAGE;
 }

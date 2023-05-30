@@ -1,11 +1,22 @@
 import { IntersectionType } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
 import {
-  IsEmail, IsIn, IsNotEmpty,
-  IsOptional, IsPhoneNumber, IsString, Matches, MaxLength, MinLength
+  ArrayMinSize,
+  IsBoolean,
+  IsEmail,
+  IsIn,
+  IsNotEmpty,
+  IsOptional,
+  IsPhoneNumber,
+  IsString,
+  Matches,
+  MaxLength,
+  MinLength,
+  ValidateNested,
 } from 'class-validator';
-import { Language } from 'src/utils/constant/language.constant';
-import { KeywordDto, PaginationDto } from '../utils/dto/pagination.dto';
-import { UserRole, UserStatus, UserType } from './users.constant';
+import { LANGUAGE } from 'src/utils/constant/constant';
+import { KeywordDto, PaginationDto } from '../../utils/dto/pagination.dto';
+import { USER_ROLE, USER_STATUS, USER_TYPE } from '../users.constant';
 
 export class UserLoginDto {
   @IsEmail()
@@ -27,8 +38,8 @@ export class UserLoginDto {
 
   @IsString()
   @IsOptional()
-  @IsIn(Object.values(UserRole))
-  role: UserRole = UserRole.User;
+  @IsIn(Object.values(USER_ROLE))
+  role: USER_ROLE = USER_ROLE.USER;
 
   @IsString()
   @IsOptional()
@@ -36,8 +47,8 @@ export class UserLoginDto {
 
   @IsString()
   @IsOptional()
-  @IsIn(Object.values(Language))
-  language: Language = Language.En;
+  @IsIn(Object.values(LANGUAGE))
+  language: LANGUAGE = LANGUAGE.EN;
 }
 
 export class UserRegisterDto {
@@ -59,13 +70,13 @@ export class UserRegisterDto {
 
   @IsString()
   @IsOptional()
-  @IsIn(Object.values(Language))
-  language: Language = Language.En;
+  @IsIn(Object.values(LANGUAGE))
+  language: LANGUAGE = LANGUAGE.EN;
 }
 
 export class UserLoginSNSDto {
   @IsNotEmpty()
-  @IsIn(Object.values(UserType))
+  @IsIn(Object.values(USER_TYPE))
   userType: string;
 
   @IsNotEmpty()
@@ -74,8 +85,8 @@ export class UserLoginSNSDto {
 
   @IsOptional()
   @IsString()
-  @IsIn(Object.values(Language))
-  language: Language = Language.En;
+  @IsIn(Object.values(LANGUAGE))
+  language: LANGUAGE = LANGUAGE.EN;
 
   @IsOptional()
   @IsString()
@@ -116,8 +127,8 @@ export class CreateUserDto {
 
   @IsString()
   @IsOptional()
-  @IsIn(Object.values(UserRole))
-  role?: UserRole;
+  @IsIn(Object.values(USER_ROLE))
+  role?: USER_ROLE;
 }
 
 export class UpdateUserDto {
@@ -167,13 +178,13 @@ export class AdminUpdateUserDto {
 
   @IsString()
   @IsOptional()
-  @IsIn(Object.values(UserRole))
-  role: UserRole;
+  @IsIn(Object.values(USER_ROLE))
+  role: USER_ROLE;
 
   @IsString()
   @IsOptional()
-  @IsIn(Object.values(UserStatus))
-  status: UserStatus;
+  @IsIn(Object.values(USER_STATUS))
+  status: USER_STATUS;
 
   @IsString()
   @MinLength(8)
@@ -188,6 +199,21 @@ export class AdminUpdateUserDto {
 export class GetUsersDto extends IntersectionType(PaginationDto, KeywordDto) {
   @IsString()
   @IsOptional()
-  @IsIn(Object.values(UserRole))
-  role: UserRole;
+  @IsIn(Object.values(USER_ROLE))
+  role: USER_ROLE;
+}
+
+export class CreateOneDto {
+  @IsOptional()
+  name: number;
+
+  @IsOptional()
+  order: number;
+}
+
+export class CreateManyDto {
+  @ValidateNested({ each: true })
+  @ArrayMinSize(1)
+  @Type(() => CreateOneDto)
+  users: CreateOneDto[];
 }

@@ -1,5 +1,5 @@
-export enum SessionStatus {
-  Active = 'ACTIVE',
-  Deactivated = 'DEACTIVATED',
-  Removed = 'REMOVED',
+export enum SESSION_STATUS {
+  ACTIVE = 'ACTIVE',
+  DEACTIVATED = 'DEACTIVATED',
+  REMOVED = 'REMOVED',
 }

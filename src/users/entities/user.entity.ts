@@ -1,26 +1,26 @@
 import { instanceToPlain } from 'class-transformer';
 import { BaseEntityCustom } from 'src/utils/entity/BaseEntity';
 import { Column, Entity, Index, OneToMany } from 'typeorm';
-import { Sessions } from '../sessions/sessions.entity';
-import { UserRole, UserStatus, UserType } from './users.constant';
+import { Sessions } from '../../sessions/entities/session.entity';
+import { USER_ROLE, USER_STATUS, USER_TYPE } from '../users.constant';
 
 @Entity({ name: 'users' })
 export class Users extends BaseEntityCustom {
   @Index()
   @Column({
     type: 'enum',
-    enum: [UserRole.User, UserRole.Admin, UserRole.SuperAdmin],
-    default: UserRole.User,
+    enum: [USER_ROLE.USER, USER_ROLE.ADMIN, USER_ROLE.SUPER_ADMIN],
+    default: USER_ROLE.USER,
   })
-  role: UserRole;
+  role: USER_ROLE;
 
   @Index()
-  @Column({ type: 'enum', enum: UserStatus, default: UserStatus.Active })
-  status: UserStatus;
+  @Column({ type: 'enum', enum: USER_STATUS, default: USER_STATUS.ACTIVE })
+  status: USER_STATUS;
 
   @Index()
-  @Column({ type: 'enum', enum: UserType, default: UserType.Email })
-  userType: UserType;
+  @Column({ type: 'enum', enum: USER_TYPE, default: USER_TYPE.EMAIL })
+  userType: USER_TYPE;
 
   @Column('varchar', { length: 255, nullable: true })
   email: string;

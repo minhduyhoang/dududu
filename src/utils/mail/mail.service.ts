@@ -1,16 +1,14 @@
 import { MailerService } from '@nestjs-modules/mailer';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { MailSubject, MailTemplate } from './mail.constant';
 
 @Injectable()
 export class MailService {
   private mailFrom: string;
   private mailTo: string;
 
-  constructor(
-    private configService: ConfigService,
-    private mailerService: MailerService,
-  ) {
+  constructor(private configService: ConfigService, private mailerService: MailerService) {
     this.mailFrom = this.configService.get<string>('MAIL_FROM');
     this.mailTo = this.configService.get<string>('MAIL_ADMIN');
   }
@@ -22,8 +20,8 @@ export class MailService {
       await this.mailerService.sendMail({
         to: this.mailTo,
         from: this.mailFrom,
-        subject: 'Dududu',
-        template: 'contact-email',
+        subject: MailSubject.AAAA,
+        template: MailTemplate.Common,
         context: { CONTENT },
       });
     } catch (error) {

@@ -18,8 +18,11 @@ import { UsersGateway } from './users/users.gateway';
 import { UsersModule } from './users/users.module';
 import { config, configValidationSchema } from './utils/config/config';
 import { DatabaseConfig } from './utils/config/database.config';
-import { Language } from './utils/constant/language.constant';
-import { AnyExceptionFilter } from './utils/filter/exception.filter';
+import { LANGUAGE } from './utils/constant/constant';
+import { ExceptionFilterCustom } from './utils/filter/exception.filter';
+import { VersionsModule } from './versions/versions.module';
+import { PublicsModule } from './publics/publics.module';
+import { CommonsModule } from './commons/commons.module';
 
 @Module({
   imports: [
@@ -43,14 +46,13 @@ import { AnyExceptionFilter } from './utils/filter/exception.filter';
       port: process.env.REDIS_PORT,
     }),
     I18nModule.forRoot({
-      fallbackLanguage: Language.En,
+      fallbackLanguage: LANGUAGE.EN,
       parserOptions: {
         path: join(__dirname, '/i18n/'),
         watch: true,
       },
       parser: I18nJsonParser,
     }),
-
     RedisCacheModule,
     UsersModule,
     AuthModule,
@@ -58,11 +60,14 @@ import { AnyExceptionFilter } from './utils/filter/exception.filter';
     HandleMessagesModule,
     UploadsModule,
     ExportExcelModule,
+    VersionsModule,
+    PublicsModule,
+    CommonsModule,
   ],
   providers: [
     {
       provide: APP_FILTER,
-      useClass: AnyExceptionFilter,
+      useClass: ExceptionFilterCustom,
     },
     UsersGateway,
     SessionsGateway,

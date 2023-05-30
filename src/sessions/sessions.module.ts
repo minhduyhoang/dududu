@@ -2,7 +2,7 @@ import { forwardRef, Module } from '@nestjs/common';
 import { SessionsService } from './sessions.service';
 import { SessionsController } from './sessions.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Sessions } from './sessions.entity';
+import { Sessions } from './entities/session.entity';
 import { UsersModule } from 'src/users/users.module';
 
 @Module({

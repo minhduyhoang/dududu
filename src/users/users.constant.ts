@@ -1,20 +1,20 @@
-export enum UserRole {
-  User = 'USER',
-  Admin = 'ADMIN',
-  SuperAdmin = 'SUPER_ADMIN',
-  Any = 'ANY',
+export enum USER_ROLE {
+  USER = 'USER',
+  ADMIN = 'ADMIN',
+  SUPER_ADMIN = 'SUPER_ADMIN',
+  ANY = 'ANY',
 }
 
-export enum UserType {
-  Email = 'EMAIL',
-  Google = 'GOOGLE',
-  Kakao = 'KAKAO',
-  Naver = 'NAVER',
-  Apple = 'APPLE',
+export enum USER_TYPE {
+  EMAIL = 'EMAIL',
+  GOOGLE = 'GOOGLE',
+  KAKAO = 'KAKAO',
+  NAVER = 'NAVER',
+  APPLE = 'APPLE',
 }
 
-export enum UserStatus {
-  Active = 'ACTIVE',
-  Block = 'BLOCK',
-  Removed = 'REMOVED',
+export enum USER_STATUS {
+  ACTIVE = 'ACTIVE',
+  BLOCK = 'BLOCK',
+  REMOVED = 'REMOVED',
 }

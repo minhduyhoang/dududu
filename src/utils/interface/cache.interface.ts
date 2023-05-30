@@ -1,3 +1,3 @@
-import { Language } from "../constant/language.constant";
+import { LANGUAGE } from '../constant/constant';
 
-export type ICache = Language;
+export type ICache = LANGUAGE;

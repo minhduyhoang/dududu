@@ -1,3 +1,4 @@
+import { instanceToPlain } from 'class-transformer';
 import { CreateDateColumn, UpdateDateColumn, DeleteDateColumn, BaseEntity, PrimaryGeneratedColumn, Index } from 'typeorm';
 
 export class BaseEntityCustom extends BaseEntity {
@@ -20,4 +21,9 @@ export class BaseEntityCustom extends BaseEntity {
 
   @DeleteDateColumn()
   deletedAt: Date;
+
+  toJSON() {
+    const result = instanceToPlain(this);
+    return result;
+  }
 }

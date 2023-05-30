@@ -1,8 +1,8 @@
-export enum UploadStatus {
-  Active = 'ACTIVE',
-  Removed = 'REMOVED',
+export enum UPLOAD_STATUS {
+  ACTIVE = 'ACTIVE',
+  REMOVED = 'REMOVED',
 }
 
-export enum FolderConstant {
-  Common = 'common',
+export enum FOLDER_CONSTANT {
+  COMMON = 'common',
 }

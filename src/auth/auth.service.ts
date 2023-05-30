@@ -6,13 +6,13 @@ import { CacheService } from 'src/cache/cache.service';
 import { FirebaseService } from 'src/firebase/firebase.service';
 import { ETokenType, IToken, IVerifyInfo } from '../auth/auth.interface';
 import { SessionsService } from '../sessions/sessions.service';
-import { UserLoginDto, UserLoginSNSDto, UserRegisterDto } from '../users/users.dto';
+import { UserLoginDto, UserLoginSNSDto, UserRegisterDto } from '../users/dto/user.dto';
 import { IReqUser, ISuccessResponse, Response } from '../utils/interface/common.interface';
 import { AuthErrorMessage } from './auth.error';
 import { AppleAuthService } from './services/apple-auth.service';
 import { KaKaoAuthService } from './services/kakao-auth.service';
 import { NaverAuthService } from './services/naver-auth.service';
-import { UserType } from 'src/users/users.constant';
+import { USER_TYPE } from 'src/users/users.constant';
 
 @Injectable()
 export class AuthService {
@@ -61,16 +61,16 @@ export class AuthService {
     let verifyData: IVerifyInfo | any = null;
 
     switch (userType) {
-      case UserType.Google:
+      case USER_TYPE.GOOGLE:
         verifyData = await this.firebaseService.authenticate(socialToken);
         break;
-      case UserType.Apple:
+      case USER_TYPE.APPLE:
         verifyData = await this.appleAuthService.authenticate(socialToken);
         break;
-      case UserType.Naver:
+      case USER_TYPE.NAVER:
         verifyData = await this.naverAuthService.authenticate(socialToken);
         break;
-      case UserType.Kakao:
+      case USER_TYPE.KAKAO:
         verifyData = await this.kakaoAuthService.authenticate(socialToken);
         break;
       default:

@@ -1,4 +1,4 @@
-import { UserRole } from "src/users/users.constant";
+import { USER_ROLE } from 'src/users/users.constant';
 
 export enum ETokenType {
   access = 'ACCESS',
@@ -8,7 +8,7 @@ export enum ETokenType {
 export interface IToken {
   userId: number;
   sessionId: number;
-  role: UserRole;
+  role: USER_ROLE;
   tokenType: ETokenType;
 }
 

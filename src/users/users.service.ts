@@ -4,14 +4,14 @@ import * as bcrypt from 'bcrypt';
 import { DataSource, In, Not, QueryRunner, Repository } from 'typeorm';
 import { CACHE_PROFILE, CACHE_SESSION } from 'src/cache/cache.constant';
 import { CacheService } from 'src/cache/cache.service';
-import { Condition } from 'src/utils/interface/condition.interface';
-import { Sessions } from '../sessions/sessions.entity';
+import { Condition } from 'src/utils/common/query.common';
+import { Sessions } from '../sessions/entities/session.entity';
 import { SessionsService } from '../sessions/sessions.service';
 import { IReqUser, ISuccessResponse, Pagination, Response } from '../utils/interface/common.interface';
-import { AdminUpdateUserDto, CreateUserDto, GetUsersDto, UpdateUserDto, UserLoginDto, UserRegisterDto } from './users.dto';
-import { Users } from './users.entity';
+import { AdminUpdateUserDto, CreateUserDto, GetUsersDto, UpdateUserDto, UserLoginDto, UserRegisterDto } from './dto/user.dto';
+import { Users } from './entities/user.entity';
 import { UsersErrorMessage } from './users.error';
-import { UserRole, UserStatus } from './users.constant';
+import { USER_ROLE, USER_STATUS } from './users.constant';
 
 @Injectable()
 export class UsersService {
@@ -27,15 +27,15 @@ export class UsersService {
   async signIn(userLoginDto: UserLoginDto): Promise<[Users, Sessions]> {
     let role: any = userLoginDto.role;
 
-    if (userLoginDto.role === UserRole.Admin) {
-      role = In([UserRole.Admin, UserRole.SuperAdmin]);
+    if (userLoginDto.role === USER_ROLE.ADMIN) {
+      role = In([USER_ROLE.ADMIN, USER_ROLE.SUPER_ADMIN]);
     }
 
     const user = await this.userRepository.findOne({
       where: {
         email: userLoginDto.email,
         role,
-        status: Not(UserStatus.Removed),
+        status: Not(USER_STATUS.REMOVED),
       },
     });
 
@@ -43,7 +43,7 @@ export class UsersService {
       throw Response.error(UsersErrorMessage.accountNotExist());
     }
 
-    if (user.status !== UserStatus.Active) {
+    if (user.status !== USER_STATUS.ACTIVE) {
       throw Response.error(UsersErrorMessage.accountInActive());
     }
 
@@ -53,7 +53,7 @@ export class UsersService {
       throw Response.error(UsersErrorMessage.incorrectPassword());
     }
 
-    if (user.role !== UserRole.Admin && user.role !== UserRole.SuperAdmin) {
+    if (user.role !== USER_ROLE.ADMIN && user.role !== USER_ROLE.SUPER_ADMIN) {
       const activeSession = await this.sessionService.findByUser(user);
 
       if (activeSession) {
@@ -80,7 +80,7 @@ export class UsersService {
 
   async signInSNS({ socialId, userType, language, deviceToken }): Promise<[Users, Sessions]> {
     let user = await this.userRepository.findOne({
-      where: { socialId, userType, role: UserRole.User, status: Not(UserStatus.Removed) },
+      where: { socialId, userType, role: USER_ROLE.USER, status: Not(USER_STATUS.REMOVED) },
     });
 
     if (!user) {
@@ -96,7 +96,7 @@ export class UsersService {
       }
     }
 
-    if (user.status !== UserStatus.Active) {
+    if (user.status !== USER_STATUS.ACTIVE) {
       throw Response.error(UsersErrorMessage.accountInActive());
     }
 
@@ -140,7 +140,7 @@ export class UsersService {
     const user = await this.userRepository.findOne({
       where: {
         id,
-        status: Not(UserStatus.Removed),
+        status: Not(USER_STATUS.REMOVED),
       },
     });
 
@@ -160,7 +160,7 @@ export class UsersService {
     const checkExistEmail = await this.userRepository.findOne({
       where: {
         email: createUserDto.email,
-        status: Not(UserStatus.Removed),
+        status: Not(USER_STATUS.REMOVED),
       },
     });
 
@@ -179,7 +179,7 @@ export class UsersService {
     const checkExistEmail = await this.userRepository.findOne({
       where: {
         email: userRegisterDto.email,
-        status: Not(UserStatus.Removed),
+        status: Not(USER_STATUS.REMOVED),
       },
     });
 
@@ -198,7 +198,7 @@ export class UsersService {
     const user = await this.userRepository.findOne({
       where: {
         id: reqUser.userId,
-        status: Not(UserStatus.Removed),
+        status: Not(USER_STATUS.REMOVED),
       },
     });
 
@@ -211,7 +211,7 @@ export class UsersService {
         where: {
           id: Not(reqUser.userId),
           email: updateUserDto.email,
-          status: Not(UserStatus.Removed),
+          status: Not(USER_STATUS.REMOVED),
         },
       });
       if (checkExistEmail) {
@@ -224,7 +224,7 @@ export class UsersService {
         where: {
           id: Not(reqUser.userId),
           phoneNumber: updateUserDto.phoneNumber,
-          status: Not(UserStatus.Removed),
+          status: Not(USER_STATUS.REMOVED),
         },
       });
       if (checkDuplicatePhoneNumber) {
@@ -239,7 +239,7 @@ export class UsersService {
     const user = await this.userRepository.findOne({
       where: {
         id,
-        status: Not(UserStatus.Removed),
+        status: Not(USER_STATUS.REMOVED),
       },
     });
 
@@ -252,7 +252,7 @@ export class UsersService {
         where: {
           id: Not(id),
           email: adminUpdateUserDto.email,
-          status: Not(UserStatus.Removed),
+          status: Not(USER_STATUS.REMOVED),
         },
       });
 
@@ -266,7 +266,7 @@ export class UsersService {
         where: {
           id: Not(id),
           phoneNumber: adminUpdateUserDto.phoneNumber,
-          status: Not(UserStatus.Removed),
+          status: Not(USER_STATUS.REMOVED),
         },
       });
 
@@ -287,7 +287,7 @@ export class UsersService {
     return this.userRepository.findOne({
       where: {
         id,
-        status: Not(UserStatus.Removed),
+        status: Not(USER_STATUS.REMOVED),
       },
     });
   }
@@ -298,14 +298,14 @@ export class UsersService {
       user = await queryRunner.manager.findOne(Users, {
         where: {
           id,
-          status: UserStatus.Active,
+          status: USER_STATUS.ACTIVE,
         },
       });
     } else {
       user = await this.userRepository.findOne({
         where: {
           id,
-          status: UserStatus.Active,
+          status: USER_STATUS.ACTIVE,
         },
       });
     }
@@ -322,8 +322,8 @@ export class UsersService {
       const user = await queryRunner.manager.findOne(Users, {
         where: {
           id,
-          status: UserStatus.Active,
-          role: Not(UserRole.SuperAdmin),
+          status: USER_STATUS.ACTIVE,
+          role: Not(USER_ROLE.SUPER_ADMIN),
         } as any,
       });
 
@@ -348,18 +348,18 @@ export class UsersService {
     const superAdmin = await this.userRepository.findOne({
       where: {
         id: reqUser.userId,
-        status: UserStatus.Active,
+        status: USER_STATUS.ACTIVE,
       },
     });
 
-    if (!superAdmin || superAdmin.role !== UserRole.SuperAdmin) {
+    if (!superAdmin || superAdmin.role !== USER_ROLE.SUPER_ADMIN) {
       throw new ForbiddenException();
     }
 
     const checkExistEmail = await this.userRepository.findOne({
       where: {
         email: createUserDto.email,
-        status: Not(UserStatus.Removed),
+        status: Not(USER_STATUS.REMOVED),
       },
     });
 
@@ -372,7 +372,7 @@ export class UsersService {
 
     const admin = this.userRepository.create({
       ...createUserDto,
-      role: UserRole.Admin,
+      role: USER_ROLE.ADMIN,
     });
 
     return this.userRepository.save(admin);

@@ -5,7 +5,7 @@ import { Auth } from 'src/auth/decorator/auth.decorator';
 import { ADMIN_PERMISSION, ANY_PERMISSION, SUPER_ADMIN_PERMISSION } from 'src/auth/permission/permission';
 import { CacheTtlSeconds, CACHE_PROFILE } from 'src/cache/cache.constant';
 import { CacheService } from 'src/cache/cache.service';
-import { AdminUpdateUserDto, CreateUserDto, GetUsersDto, UpdateUserDto } from './users.dto';
+import { AdminUpdateUserDto, CreateUserDto, GetUsersDto, UpdateUserDto } from './dto/user.dto';
 import { UsersService } from './users.service';
 
 @Controller('users')
@@ -46,7 +46,6 @@ export class UsersController {
   async findOne(@Param('id', ParseIntPipe) id: number): Promise<ISuccessResponse> {
     const user = await this.usersService.findOne(+id);
     return Response.success(user);
-
   }
 
   @Auth(ADMIN_PERMISSION)

@@ -1,7 +1,7 @@
 import { Body, Controller, Put, Request } from '@nestjs/common';
 import { IRequest } from 'src/utils/interface/request.interface';
 import { ISuccessResponse, Response } from 'src/utils/interface/response.interface';
-import { ChangeLanguageDto } from './sessions.dto';
+import { ChangeLanguageDto } from './dto/session.dto';
 import { SessionsService } from './sessions.service';
 import { Auth } from 'src/auth/decorator/auth.decorator';
 import { ANY_PERMISSION } from 'src/auth/permission/permission';

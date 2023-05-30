@@ -1,7 +1,7 @@
-import { UserRole } from "src/users/users.constant";
+import { USER_ROLE } from 'src/users/users.constant';
 
-export const SUPER_ADMIN_PERMISSION = [UserRole.SuperAdmin];
+export const SUPER_ADMIN_PERMISSION = [USER_ROLE.ADMIN, USER_ROLE.SUPER_ADMIN];
 
-export const ADMIN_PERMISSION = [UserRole.Admin, UserRole.SuperAdmin];
+export const ADMIN_PERMISSION = [USER_ROLE.SUPER_ADMIN];
 
-export const ANY_PERMISSION = [UserRole.Any];
+export const ANY_PERMISSION = [USER_ROLE.ANY];

@@ -3,8 +3,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { AWSService } from 'src/aws/aws.service';
 import { Response } from 'src/utils/interface/response.interface';
 import { QueryRunner, Repository } from 'typeorm';
-import { UploadStatus, FolderConstant } from './uploads.constant';
-import { Uploads } from './uploads.entity';
+import { UPLOAD_STATUS, FOLDER_CONSTANT } from './uploads.constant';
+import { Uploads } from './entities/upload.entity';
 import { UploadsErrorMessage } from './uploads.error';
 
 @Injectable()
@@ -18,7 +18,7 @@ export class UploadsService {
     return text;
   }
 
-  async upload(fileUpload: Express.Multer.File, folder: FolderConstant = FolderConstant.Common, queryRunner?: QueryRunner): Promise<Uploads> {
+  async upload(fileUpload: Express.Multer.File, folder: FOLDER_CONSTANT = FOLDER_CONSTANT.COMMON, queryRunner?: QueryRunner): Promise<Uploads> {
     const fileName = this.awsService.truncateString(fileUpload.originalname);
     const key: string = `${folder}/${new Date().getUTCFullYear()}/${new Date().getUTCMonth() + 1}/${Date.now()}-${fileName}`;
 
@@ -47,14 +47,14 @@ export class UploadsService {
       fileUpload = await queryRunner.manager.findOne(Uploads, {
         where: {
           id,
-          status: UploadStatus.Active,
+          status: UPLOAD_STATUS.ACTIVE,
         },
       });
     } else {
       fileUpload = await this.uploadsRepository.findOne({
         where: {
           id,
-          status: UploadStatus.Active,
+          status: UPLOAD_STATUS.ACTIVE,
         },
       });
     }
@@ -70,15 +70,12 @@ export class UploadsService {
     const fileUpload = await this.uploadsRepository.findOne({
       where: {
         id,
-        status: UploadStatus.Active,
+        status: UPLOAD_STATUS.ACTIVE,
       },
     });
 
     if (fileUpload) {
-      await Promise.all([
-        this.awsService.deleteFile(fileUpload.key),
-        this.uploadsRepository.softDelete(id),
-      ]);
+      await Promise.all([this.awsService.deleteFile(fileUpload.key), this.uploadsRepository.softDelete(id)]);
     }
   }
 }
