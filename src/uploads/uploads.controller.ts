@@ -1,7 +1,7 @@
 import { Controller, Delete, Get, Param, ParseIntPipe, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ADMIN_PERMISSION, ANY_PERMISSION } from 'src/auth/permission/permission';
-import { Auth } from 'src/auth/decorator/auth.decorator';
+import { ADMIN_PERMISSION, ANY_PERMISSION } from 'src/auth/permissions/permission';
+import { Auth } from 'src/auth/decorators/auth.decorator';
 import { ISuccessResponse, Response } from 'src/utils/interface/response.interface';
 import { UploadsService } from './uploads.service';
 

@@ -1,14 +1,12 @@
 import { Controller, Get, Res } from '@nestjs/common';
 import { Response } from 'express';
-import { Auth } from 'src/auth/decorator/auth.decorator';
-import { ADMIN_PERMISSION } from 'src/auth/permission/permission';
+import { Auth } from 'src/auth/decorators/auth.decorator';
+import { ADMIN_PERMISSION } from 'src/auth/permissions/permission';
 import { ExportExcelService } from './export-excel.service';
 
 @Controller('export-excels')
 export class ExportExcelController {
-  constructor(
-    private readonly exportExcelService: ExportExcelService,
-  ) {}
+  constructor(private readonly exportExcelService: ExportExcelService) {}
 
   @Auth(ADMIN_PERMISSION)
   @Get()

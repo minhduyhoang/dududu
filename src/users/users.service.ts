@@ -12,6 +12,7 @@ import { AdminUpdateUserDto, CreateUserDto, GetUsersDto, UpdateUserDto, UserLogi
 import { Users } from './entities/user.entity';
 import { UsersErrorMessage } from './users.error';
 import { USER_ROLE, USER_STATUS } from './users.constant';
+import { UsersGateway } from './users.gateway';
 
 @Injectable()
 export class UsersService {
@@ -21,7 +22,8 @@ export class UsersService {
     @Inject(forwardRef(() => SessionsService))
     private sessionService: SessionsService,
     private readonly cacheService: CacheService,
-    private dataSource: DataSource
+    private dataSource: DataSource,
+    private usersGateway: UsersGateway
   ) {}
 
   async signIn(userLoginDto: UserLoginDto): Promise<[Users, Sessions]> {
@@ -376,5 +378,9 @@ export class UsersService {
     });
 
     return this.userRepository.save(admin);
+  }
+
+  async test () {
+    this.usersGateway.test()
   }
 }

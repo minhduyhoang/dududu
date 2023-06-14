@@ -1,8 +1,8 @@
 import { Controller, Delete, Param, Post } from '@nestjs/common';
 import { CacheService } from './cache.service';
 import { Response } from 'src/utils/interface/response.interface';
-import { Auth } from 'src/auth/decorator/auth.decorator';
-import { ADMIN_PERMISSION } from 'src/auth/permission/permission';
+import { Auth } from 'src/auth/decorators/auth.decorator';
+import { ADMIN_PERMISSION } from 'src/auth/permissions/permission';
 
 @Controller('cache')
 export class CacheController {

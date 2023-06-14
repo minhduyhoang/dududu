@@ -1,10 +1,8 @@
 import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { NestFactory, Reflector } from '@nestjs/core';
+import { NestFactory } from '@nestjs/core';
 import { Transport } from '@nestjs/microservices';
 import { AppModule } from './app.module';
-import { JwtAuthGuard } from './auth/guard/jwt-auth.guard';
-import { RolesGuard } from './auth/guard/role.guard';
 import { RedisIoAdapter } from './utils/adapter/redis.adapter';
 
 async function bootstrap() {
@@ -20,7 +18,6 @@ async function bootstrap() {
       transformOptions: { enableImplicitConversion: true },
     })
   );
-  app.useGlobalGuards(new JwtAuthGuard(), new RolesGuard(new Reflector()));
   app.setGlobalPrefix('api');
 
   app.connectMicroservice({

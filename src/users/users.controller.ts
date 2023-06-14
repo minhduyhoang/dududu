@@ -1,8 +1,8 @@
 import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, Query, Request } from '@nestjs/common';
 import { IRequest, ISuccessResponse, Response } from '../utils/interface/common.interface';
 
-import { Auth } from 'src/auth/decorator/auth.decorator';
-import { ADMIN_PERMISSION, ANY_PERMISSION, SUPER_ADMIN_PERMISSION } from 'src/auth/permission/permission';
+import { Auth } from 'src/auth/decorators/auth.decorator';
+import { ADMIN_PERMISSION, ANY_PERMISSION, SUPER_ADMIN_PERMISSION } from 'src/auth/permissions/permission';
 import { CacheTtlSeconds, CACHE_PROFILE } from 'src/cache/cache.constant';
 import { CacheService } from 'src/cache/cache.service';
 import { AdminUpdateUserDto, CreateUserDto, GetUsersDto, UpdateUserDto } from './dto/user.dto';
@@ -33,6 +33,11 @@ export class UsersController {
       async () => this.usersService.myProfile(req.user),
       CacheTtlSeconds.ONE_HOUR
     );
+  }
+
+  @Get('test')
+  test() {
+    return this.usersService.test();
   }
 
   @Auth(ADMIN_PERMISSION)

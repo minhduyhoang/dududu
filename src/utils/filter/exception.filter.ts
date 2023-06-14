@@ -5,6 +5,7 @@ import { LANGUAGE } from '../constant/constant';
 import { IErrorResponse } from '../interface/common.interface';
 import * as moment from 'moment-timezone';
 import * as fs from 'fs';
+import { EntityNotFoundError, QueryFailedError, TypeORMError } from 'typeorm';
 
 const dir = 'src/logs';
 
@@ -18,8 +19,8 @@ function writeLogs(error: any) {
   logFile.write(`\n`);
 }
 
-@Catch(HttpException)
-export class ExceptionFilterCustom implements ExceptionFilter {
+@Catch(HttpException, QueryFailedError, EntityNotFoundError, TypeORMError)
+export class AnyExceptionFilter implements ExceptionFilter {
   constructor(private readonly i18n?: I18nService) {}
   async catch(error: any, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
@@ -27,8 +28,9 @@ export class ExceptionFilterCustom implements ExceptionFilter {
     const request: any = host.switchToHttp().getRequest();
     const reqUser = request.user;
 
-    writeLogs(error);
-
+    if (error?.status !== 401 && error?.status !== 403) {
+      writeLogs(error);
+    }
     const status = error instanceof HttpException ? error.getStatus() : HttpStatus.INTERNAL_SERVER_ERROR;
 
     let message: string;
@@ -39,7 +41,7 @@ export class ExceptionFilterCustom implements ExceptionFilter {
     const data = error?.response?.data || {};
 
     if (code === '000' && file === 'common') {
-      message = error?.sqlMessage || error?.response?.message || JSON.stringify(error?.response) || JSON.stringify(error);
+      message = error?.sqlMessage || error?.response?.message || error.message || JSON.stringify(error?.response) || JSON.stringify(error);
       if (Array.isArray(message)) {
         message = message.join(', ');
       }

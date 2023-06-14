@@ -9,8 +9,10 @@ import { join } from 'path';
 import type { ClientOpts as RedisClientOpts } from 'redis';
 import { AuthModule } from './auth/auth.module';
 import { RedisCacheModule } from './cache/cache.module';
+import { CommonsModule } from './commons/commons.module';
 import { ExportExcelModule } from './export-excel/export-excel.module';
 import { HandleMessagesModule } from './handle-messages/handle-messages.module';
+import { PublicsModule } from './publics/publics.module';
 import { SessionsGateway } from './sessions/sessions.gateway';
 import { SessionsModule } from './sessions/sessions.module';
 import { UploadsModule } from './uploads/uploads.module';
@@ -19,10 +21,8 @@ import { UsersModule } from './users/users.module';
 import { config, configValidationSchema } from './utils/config/config';
 import { DatabaseConfig } from './utils/config/database.config';
 import { LANGUAGE } from './utils/constant/constant';
-import { ExceptionFilterCustom } from './utils/filter/exception.filter';
+import { AnyExceptionFilter } from './utils/filter/exception.filter';
 import { VersionsModule } from './versions/versions.module';
-import { PublicsModule } from './publics/publics.module';
-import { CommonsModule } from './commons/commons.module';
 
 @Module({
   imports: [
@@ -67,7 +67,7 @@ import { CommonsModule } from './commons/commons.module';
   providers: [
     {
       provide: APP_FILTER,
-      useClass: ExceptionFilterCustom,
+      useClass: AnyExceptionFilter,
     },
     UsersGateway,
     SessionsGateway,
