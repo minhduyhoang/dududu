@@ -29,7 +29,7 @@ export class UsersController {
   @Get(['my-profile'])
   myProfile(@Request() req: IRequest): Promise<ISuccessResponse> {
     return this.cacheService.remember(
-      `${CACHE_PROFILE}:${req.user.userId}`,
+      `${req.user.language}:${CACHE_PROFILE}:${req.user.userId}`,
       async () => this.usersService.myProfile(req.user),
       CacheTtlSeconds.ONE_HOUR
     );

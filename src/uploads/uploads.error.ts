@@ -1,4 +1,3 @@
-import { UPLOAD_ERROR_CODE } from '../utils/error/code.error';
 import { ErrorResponse } from '../utils/interface/response.interface';
 
 class UploadsError extends ErrorResponse {
@@ -8,23 +7,23 @@ class UploadsError extends ErrorResponse {
   }
 
   uploadFailed() {
-    return this.response(UPLOAD_ERROR_CODE + 1, this.fileName);
+    return this.response('501', this.fileName, true);
   }
 
   deleteFailed() {
-    return this.response(UPLOAD_ERROR_CODE + 2, this.fileName);
+    return this.response('502', this.fileName, true);
   }
 
   onlyImagesAllowed() {
-    return this.response(UPLOAD_ERROR_CODE + 3, this.fileName);
+    return this.response('503', this.fileName, true);
   }
 
   fileUploadIsEmpty() {
-    return this.response(UPLOAD_ERROR_CODE + 5, this.fileName);
+    return this.response('505', this.fileName, true);
   }
 
   notFound() {
-    return this.response(UPLOAD_ERROR_CODE + 6, this.fileName);
+    return this.response('506', this.fileName, true);
   }
 }
 

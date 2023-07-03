@@ -50,6 +50,22 @@ class ConditionQuery {
 
     return conditions;
   }
+
+  public search(data: any = {}, conditions: any = {}) {
+    const { keyword } = data;
+    if (keyword && data.keySearch) {
+      delete conditions['name'];
+      delete conditions[data.keySearch];
+      const keySearch = data.keySearch.split(',');
+      conditions =
+        keySearch.length &&
+        keySearch.map((item) => {
+          return { ...conditions, [item]: Like('%' + keyword + '%') };
+        });
+    }
+
+    return conditions;
+  }
 }
 
 export const Condition = new ConditionQuery();

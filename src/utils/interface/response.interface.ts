@@ -12,22 +12,26 @@ export interface IErrorResponse {
 export interface FilterErrorResponse {
   code: string;
   file: string;
+  isShow: boolean;
   data?: any;
 }
 
 export class ErrorResponse {
   code: string;
   file: string;
+  isShow: boolean;
   data: any;
   constructor(error: FilterErrorResponse) {
     this.code = error.code;
     this.file = error.file;
+    this.isShow = error.isShow;
     this.data = error.data || {};
   }
 
-  response(code: number, file: string, data?: any) {
-    this.code = code?.toString().padStart(3, '0');
+  response(code: string, file: string, isShow: boolean, data?: any) {
+    this.code = code;
     this.file = file;
+    this.isShow = isShow;
     this.data = data;
     return this;
   }
