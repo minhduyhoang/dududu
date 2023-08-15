@@ -1,6 +1,6 @@
 import { Controller, Delete, Get, Param, ParseIntPipe, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ADMIN_PERMISSION, ANY_PERMISSION } from 'src/auth/permissions/permission';
+import { ADMIN_PERMISSION } from 'src/auth/permissions/permission';
 import { Auth } from 'src/auth/decorators/auth.decorator';
 import { ISuccessResponse, Response } from 'src/utils/interface/response.interface';
 import { UploadsService } from './uploads.service';
@@ -9,7 +9,7 @@ import { UploadsService } from './uploads.service';
 export class UploadsController {
   constructor(private readonly uploadsService: UploadsService) {}
 
-  @Auth(ANY_PERMISSION)
+  @Auth()
   @Post()
   @UseInterceptors(FileInterceptor('fileUpload', {}))
   async upload(@UploadedFile() fileUpload: Express.Multer.File): Promise<ISuccessResponse> {

@@ -69,6 +69,15 @@ export class UserRegisterDto {
   deviceToken: string;
 
   @IsString()
+  @MinLength(8)
+  @MaxLength(50)
+  @Matches(/^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[@$!%*?&])([a-zA-Z0-9@$!%*?&]{8,})$/, {
+    message: 'password too weak',
+  })
+  @IsNotEmpty()
+  password: string;
+
+  @IsString()
   @IsOptional()
   @IsIn(Object.values(LANGUAGE))
   language: LANGUAGE = LANGUAGE.EN;

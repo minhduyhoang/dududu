@@ -4,12 +4,16 @@ import { NestFactory } from '@nestjs/core';
 import { Transport } from '@nestjs/microservices';
 import { AppModule } from './app.module';
 import { RedisIoAdapter } from './utils/adapter/redis.adapter';
+import { Logger, LoggerErrorInterceptor } from 'nestjs-pino';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const configService = app.get(ConfigService);
   const port = configService.get('PORT');
   app.enableCors();
+  app.useGlobalInterceptors(new LoggerErrorInterceptor());
+  app.useLogger(app.get(Logger));
+
   app.useWebSocketAdapter(new RedisIoAdapter(app));
   app.useGlobalPipes(
     new ValidationPipe({

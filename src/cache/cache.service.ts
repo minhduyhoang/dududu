@@ -5,12 +5,18 @@ import { Cache } from 'cache-manager';
 export class CacheService {
   constructor(@Inject('CACHE_MANAGER') private cacheManager: Cache) {}
 
-  private defaultTtl = 3600; // 1 hour
+  private defaultTtl = 3600000; // 1 hour
 
   async clearCacheByPattern(pattern: string) {
     const keys = await this.cacheManager.store.keys();
     const userCaches = keys.filter((el: string) => el.includes(pattern));
-    if (userCaches.length > 0) await this.cacheManager.del(userCaches);
+    if (userCaches.length > 0) {
+      await Promise.all(
+        userCaches.map(async (item) => {
+          return this.cacheManager.del(item);
+        })
+      );
+    }
   }
 
   async reset() {
@@ -32,7 +38,7 @@ export class CacheService {
   async set(key: string, value: string | Record<string, any>, ttlInSec?: number): Promise<any> {
     const ttl = ttlInSec ? ttlInSec : this.defaultTtl;
 
-    if (ttl >= 0) await this.cacheManager.set(key, JSON.stringify(value), { ttl });
+    if (ttl >= 0) await this.cacheManager.set(key, JSON.stringify(value), { ttl } as any);
     else await this.cacheManager.set(key, JSON.stringify(value));
   }
 
@@ -52,7 +58,7 @@ export class CacheService {
     if (lock) {
       return true;
     } else {
-      await this.cacheManager.set(key, 'true', { ttl });
+      await this.cacheManager.set(key, 'true', { ttl } as any);
       return false;
     }
   }

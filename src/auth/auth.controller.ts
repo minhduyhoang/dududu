@@ -4,7 +4,6 @@ import { UserLoginDto, UserLoginSNSDto, UserRegisterDto } from '../users/dto/use
 import { IRequest } from '../utils/interface/common.interface';
 import { AuthService } from './auth.service';
 import { JwtRefreshTokenGuard } from './guards/jwt-refresh-token.guard';
-import { ANY_PERMISSION } from './permissions/permission';
 
 @Controller('auth')
 export class AuthController {
@@ -25,7 +24,7 @@ export class AuthController {
     return this.authService.loginSNS(userLoginSNSDto);
   }
 
-  @Auth(ANY_PERMISSION)
+  @Auth()
   @Put('logout')
   async logout(@Request() req: IRequest) {
     return this.authService.logout(req.user);

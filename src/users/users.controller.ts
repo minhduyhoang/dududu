@@ -2,7 +2,7 @@ import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, Query, R
 import { IRequest, ISuccessResponse, Response } from '../utils/interface/common.interface';
 
 import { Auth } from 'src/auth/decorators/auth.decorator';
-import { ADMIN_PERMISSION, ANY_PERMISSION, SUPER_ADMIN_PERMISSION } from 'src/auth/permissions/permission';
+import { ADMIN_PERMISSION, SUPER_ADMIN_PERMISSION } from 'src/auth/permissions/permission';
 import { CacheTtlSeconds, CACHE_PROFILE } from 'src/cache/cache.constant';
 import { CacheService } from 'src/cache/cache.service';
 import { AdminUpdateUserDto, CreateUserDto, GetUsersDto, UpdateUserDto } from './dto/user.dto';
@@ -25,7 +25,7 @@ export class UsersController {
     return Response.success(admin);
   }
 
-  @Auth(ANY_PERMISSION)
+  @Auth()
   @Get(['my-profile'])
   myProfile(@Request() req: IRequest): Promise<ISuccessResponse> {
     return this.cacheService.remember(
@@ -60,7 +60,7 @@ export class UsersController {
     return Response.success();
   }
 
-  @Auth(ANY_PERMISSION)
+  @Auth()
   @Put()
   async updateUser(@Body() updateUserDto: UpdateUserDto, @Request() req: IRequest): Promise<ISuccessResponse> {
     await this.usersService.updateUser(req.user, updateUserDto);
@@ -74,7 +74,7 @@ export class UsersController {
     return Response.success();
   }
 
-  @Auth(ANY_PERMISSION)
+  @Auth()
   @Delete()
   async deleteUser(@Request() req: IRequest): Promise<ISuccessResponse> {
     await this.usersService.deleteUser(req.user.userId);

@@ -32,4 +32,11 @@ export class UsersGateway implements OnGatewayConnection, OnGatewayDisconnect {
   test(): void {
     this.io.to('some room').emit('some event', 'asdasdasdasdasdasd');
   }
+
+  // @UseGuards(AuthGuard)
+  // @SubscribeMessage('events')
+  // handleEvent(client: Client, data: unknown): WsResponse<unknown> {
+  //   const event = 'events';
+  //   return { event, data };
+  // }
 }

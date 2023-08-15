@@ -1,12 +1,11 @@
-import { CacheModule, Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { Module } from '@nestjs/common';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_FILTER } from '@nestjs/core';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import * as redisStore from 'cache-manager-redis-store';
-import { I18nJsonParser, I18nModule } from 'nestjs-i18n';
+import { redisStore } from 'cache-manager-redis-store';
+import { AcceptLanguageResolver, I18nModule } from 'nestjs-i18n';
 import { join } from 'path';
-import type { ClientOpts as RedisClientOpts } from 'redis';
 import { AuthModule } from './auth/auth.module';
 import { RedisCacheModule } from './cache/cache.module';
 import { CommonsModule } from './commons/commons.module';
@@ -20,9 +19,12 @@ import { UsersGateway } from './users/users.gateway';
 import { UsersModule } from './users/users.module';
 import { config, configValidationSchema } from './utils/config/config';
 import { DatabaseConfig } from './utils/config/database.config';
-import { LANGUAGE } from './utils/constant/constant';
+import { LANGUAGE, NODE_ENV } from './utils/constant/constant';
 import { AnyExceptionFilter } from './utils/filter/exception.filter';
 import { VersionsModule } from './versions/versions.module';
+import { ChatGptModule } from './chat-gpt/chat-gpt.module';
+import { CacheModule } from '@nestjs/cache-manager';
+import { LoggerModule } from 'nestjs-pino';
 
 @Module({
   imports: [
@@ -39,19 +41,36 @@ import { VersionsModule } from './versions/versions.module';
       imports: [ConfigModule],
       useClass: DatabaseConfig,
     }),
-    CacheModule.register<RedisClientOpts>({
+    CacheModule.registerAsync<any>({
       isGlobal: true,
-      store: redisStore,
-      host: process.env.REDIS_HOST,
-      port: process.env.REDIS_PORT,
-    }),
-    I18nModule.forRoot({
-      fallbackLanguage: LANGUAGE.EN,
-      parserOptions: {
-        path: join(__dirname, '/i18n/'),
-        watch: true,
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => {
+        const store = await redisStore({
+          url: configService.get('REDIS_URL'),
+          ttl: 60,
+        });
+        return {
+          store: () => store,
+        };
       },
-      parser: I18nJsonParser,
+      inject: [ConfigService],
+    }),
+    I18nModule.forRootAsync({
+      inject: [ConfigService],
+      resolvers: [AcceptLanguageResolver],
+      useFactory: (configService: ConfigService) => ({
+        fallbackLanguage: LANGUAGE.EN,
+        loaderOptions: {
+          path: join(__dirname, '/i18n/'),
+          watch: true,
+        },
+      }),
+    }),
+    LoggerModule.forRoot({
+      pinoHttp: {
+        level: process.env.NODE_ENV !== NODE_ENV.PRODUCTION ? 'debug' : 'info',
+        transport: process.env.NODE_ENV !== NODE_ENV.PRODUCTION ? { target: 'pino-pretty' } : undefined,
+      },
     }),
     RedisCacheModule,
     UsersModule,
@@ -63,6 +82,7 @@ import { VersionsModule } from './versions/versions.module';
     VersionsModule,
     PublicsModule,
     CommonsModule,
+    ChatGptModule,
   ],
   providers: [
     {

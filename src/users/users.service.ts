@@ -189,6 +189,9 @@ export class UsersService {
       throw Response.error(UsersErrorMessage.emailAlreadyExist());
     }
 
+    const salt = await bcrypt.genSalt();
+    userRegisterDto.password = await bcrypt.hash(userRegisterDto.password, salt);
+
     const user = this.userRepository.create(userRegisterDto);
     await this.userRepository.save(user);
 
@@ -380,7 +383,7 @@ export class UsersService {
     return this.userRepository.save(admin);
   }
 
-  async test () {
-    this.usersGateway.test()
+  async test() {
+    this.usersGateway.test();
   }
 }

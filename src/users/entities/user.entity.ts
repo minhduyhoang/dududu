@@ -1,4 +1,5 @@
 import { instanceToPlain } from 'class-transformer';
+import { ColumnNumberTransformer } from 'src/utils/common/common';
 import { BaseEntityCustom } from 'src/utils/entity/BaseEntity';
 import { Column, Entity, Index, OneToMany } from 'typeorm';
 import { Sessions } from '../../sessions/entities/session.entity';
@@ -45,6 +46,9 @@ export class Users extends BaseEntityCustom {
 
   @Column('varchar', { length: 255, nullable: true })
   password: string;
+
+  // @Column({ nullable: false, type: 'bigint', default: 0, transformer: new ColumnNumberTransformer() })
+  // pointValue: number;
 
   @OneToMany(() => Sessions, (session) => session.user)
   sessions: Sessions[];
