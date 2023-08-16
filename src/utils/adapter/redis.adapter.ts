@@ -4,7 +4,7 @@ import { ServerOptions } from 'socket.io';
 import { createAdapter } from '@socket.io/redis-adapter';
 
 const pubClient = createClient({
-  url: `redis://${process.env.REDIS_HOST}:${process.env.REDIS_PORT}`, // redis[s]://[[username][:password]@][host][:port][/db-number]
+  url: `redis://default:${process.env.REDIS_PASSWORD}@${process.env.REDIS_HOST}:${process.env.REDIS_PORT}`, // redis[s]://[[username][:password]@][host][:port][/db-number]
 });
 const subClient = pubClient.duplicate();
 const redisAdapter = createAdapter(pubClient, subClient);

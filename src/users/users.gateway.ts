@@ -1,7 +1,15 @@
 import { OnGatewayConnection, OnGatewayDisconnect, SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
 import { Socket, Server } from 'socket.io';
 
-@WebSocketGateway(3006, { cors: true })
+@WebSocketGateway(3006, {
+  transports: ['websocket', 'polling', 'flashsocket'],
+  cors: {
+    origin: '*',
+    methods: ['PUT', 'GET', 'POST', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['my-custom-header'],
+    credentials: true,
+  },
+})
 export class UsersGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer() io: Server;
 
