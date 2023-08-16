@@ -48,6 +48,7 @@ import { LoggerModule } from 'nestjs-pino';
         const store = await redisStore({
           url: configService.get('REDIS_URL'),
           ttl: 60,
+          password: process.env.REDIS_PASSWORD,
         });
         return {
           store: () => store,
