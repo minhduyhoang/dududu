@@ -1,5 +1,7 @@
+import { forwardRef, Inject } from '@nestjs/common';
 import { OnGatewayConnection, OnGatewayDisconnect, SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
-import { Socket, Server } from 'socket.io';
+import { Server, Socket } from 'socket.io';
+import { UsersService } from './users.service';
 
 @WebSocketGateway(3006, {
   transports: ['websocket', 'polling', 'flashsocket'],
@@ -13,14 +15,20 @@ import { Socket, Server } from 'socket.io';
 export class UsersGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer() io: Server;
 
-  handleConnection(socket: Socket) {
-    socket.join('some room');
-    console.log('test asdsadasdasd', socket.id);
-    this.io.emit('message', 'This is test');
+  constructor(
+    @Inject(forwardRef(() => UsersService))
+    private readonly usersService: UsersService
+  ) {}
+
+  async handleConnection(socket: Socket) {
+    // socket.join('some room');
+    // console.log('test asdsadasdasd', socket.id);
+    // this.io.emit('message', 'This is test');
+    await this.usersService.getUserFromSocket(socket);
   }
   handleDisconnect(socket: Socket) {}
 
-  @SubscribeMessage('test')
+  @SubscribeMessage('connected-socket')
   handleMessage(socket: Socket, payload: any): void {
     console.log('test asdsadasdasd');
   }

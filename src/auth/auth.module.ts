@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
@@ -19,8 +19,8 @@ import { FirebaseService } from 'src/firebase/firebase.service';
 
 @Module({
   imports: [
-    UsersModule,
-    SessionsModule,
+    forwardRef(() => UsersModule),
+    forwardRef(() => SessionsModule),
     PassportModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],

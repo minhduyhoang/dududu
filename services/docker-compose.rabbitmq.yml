@@ -1,0 +1,12 @@
+version: '3.2'
+services:
+  rabbitmq:
+    container_name: dududu-rabbitmq
+    restart: on-failure
+    image: rabbitmq:3-management
+    ports:
+      - '${RABBIT_UI_PORT}:15672'
+      - '${RABBIT_API_PORT}:5672'
+networks:
+  default:
+    name: '${NETWORK_NAME}'

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from '../users/users.service';
 import { CacheTtlSeconds, CACHE_SESSION } from 'src/cache/cache.constant';
@@ -13,18 +13,23 @@ import { AppleAuthService } from './services/apple-auth.service';
 import { KaKaoAuthService } from './services/kakao-auth.service';
 import { NaverAuthService } from './services/naver-auth.service';
 import { USER_TYPE } from 'src/users/users.constant';
+import { ConfigService } from '@nestjs/config';
+import { Socket } from 'socket.io';
 
 @Injectable()
 export class AuthService {
   constructor(
+    @Inject(forwardRef(() => UsersService))
     private readonly usersService: UsersService,
+    @Inject(forwardRef(() => SessionsService))
     private readonly sessionsService: SessionsService,
     private readonly jwtService: JwtService,
     private readonly firebaseService: FirebaseService,
     private readonly appleAuthService: AppleAuthService,
     private readonly naverAuthService: NaverAuthService,
     private readonly kakaoAuthService: KaKaoAuthService,
-    private readonly cacheService: CacheService
+    private readonly cacheService: CacheService,
+    private configService: ConfigService
   ) {}
 
   async login(userLoginDto: UserLoginDto): Promise<ISuccessResponse> {
@@ -161,5 +166,21 @@ export class AuthService {
     await this.cacheService.set(`${CACHE_SESSION}:${String(session.id)}`, session.language, CacheTtlSeconds.ONE_DAY);
 
     return Response.success({ user, tokens });
+  }
+
+  public async verifyToken(socket: Socket): Promise<IToken> {
+    const token = socket?.handshake?.auth?.token;
+    if (!token) {
+      socket.disconnect();
+    }
+    const payload: IToken = await this.jwtService.verify(token, {
+      secret: this.configService.get('JWT_SECRET'),
+    });
+
+    if (!payload) {
+      socket.disconnect();
+    }
+
+    return payload;
   }
 }

@@ -13,6 +13,9 @@ import { Users } from './entities/user.entity';
 import { UsersErrorMessage } from './users.error';
 import { USER_ROLE, USER_STATUS } from './users.constant';
 import { UsersGateway } from './users.gateway';
+import { Socket } from 'socket.io';
+import { AuthService } from 'src/auth/auth.service';
+import { AuthErrorMessage } from 'src/auth/auth.error';
 
 @Injectable()
 export class UsersService {
@@ -23,7 +26,9 @@ export class UsersService {
     private sessionService: SessionsService,
     private readonly cacheService: CacheService,
     private dataSource: DataSource,
-    private usersGateway: UsersGateway
+    private usersGateway: UsersGateway,
+    @Inject(forwardRef(() => AuthService))
+    private authService: AuthService
   ) {}
 
   async signIn(userLoginDto: UserLoginDto): Promise<[Users, Sessions]> {
@@ -385,5 +390,19 @@ export class UsersService {
 
   async test() {
     this.usersGateway.test();
+  }
+
+  async getUserFromSocket(socket: Socket) {
+    const payload = await this.authService.verifyToken(socket);
+    if (!payload) {
+      socket.disconnect();
+    }
+
+    const user = await this.getOne(payload.userId);
+    if (!user || user.status !== USER_STATUS.ACTIVE) {
+      socket.disconnect();
+    }
+
+    return user;
   }
 }

@@ -68,13 +68,24 @@ export class FirebaseService {
       });
   }
 
-  public async sendToDevice(deviceToken: string | string[], payload: messaging.MessagingPayload): Promise<void> {
-    const options: messaging.MessagingOptions = { dryRun: false };
+  public async sendToDevice(deviceTokens: string[], payload: messaging.MessagingPayload): Promise<void> {
+    const message = {
+      tokens: deviceTokens,
+      notification: {
+        title: 'abcd',
+        body: 'abcd',
+      },
+      data: {
+        score: '850',
+        time: '2:45',
+      },
+    };
+
     return firebaseAdmin
       .messaging()
-      .sendToDevice(deviceToken, payload, options)
-      .then((res: messaging.MessagingDevicesResponse) => {
-        console.log('Res push noti:', res?.results[0]);
+      .sendEachForMulticast(message)
+      .then((res: messaging.BatchResponse) => {
+        console.log('Res push noti:', res?.responses[0]);
 
         if (res.successCount && res.successCount === 1) console.log('Successfully sent message');
         else console.log('Error sending message');
