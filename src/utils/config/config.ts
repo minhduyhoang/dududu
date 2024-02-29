@@ -33,7 +33,7 @@ export const config = () => ({
     port: Number(process.env.PORT),
     jwtSecret: process.env.JWT_SECRET,
   },
-  postgresdb: {
+  mysql: {
     type: process.env.DB_TYPE,
     host: process.env.DB_HOST,
     port: Number(process.env.DB_PORT),

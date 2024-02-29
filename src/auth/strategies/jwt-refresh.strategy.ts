@@ -20,7 +20,7 @@ export class JwtRefreshTokenStrategy extends PassportStrategy(Strategy, 'jwt-ref
   }
 
   async validate(token: IToken): Promise<IReqUser> {
-    if (token.tokenType !== ETokenType.refresh) {
+    if (token.tokenType !== ETokenType.refresh || !token?.sessionId) {
       throw Response.unauthorized(AuthErrorMessage.invalidRefreshToken());
     }
     const cache: ICache = await this.cacheService.get(String(token.sessionId));

@@ -11,7 +11,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
   handleRequest(err, user, info) {
     //Invalid or missing JWT
     if (err || !user) {
-      throw Response.unauthorized(AuthErrorMessage.unauthorized());
+      return null;
     }
     return user;
   }

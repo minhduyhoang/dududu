@@ -7,6 +7,6 @@ export class DatabaseConfig implements TypeOrmOptionsFactory {
   constructor(private configService: ConfigService) {}
 
   createTypeOrmOptions() {
-    return this.configService.get('postgresdb');
+    return this.configService.get('mysql');
   }
 }

@@ -21,7 +21,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(token: IToken): Promise<IReqUser> {
-    if (token.tokenType !== ETokenType.access) {
+    if (token.tokenType !== ETokenType.access || !token?.sessionId) {
       throw Response.unauthorized(AuthErrorMessage.invalidAccessToken());
     }
     //Check Redis, if not then check database
