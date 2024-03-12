@@ -109,5 +109,3 @@ dist
 deploy.sh
 
 /src/firebase/firebase.config.json
-
-package-lock.json

@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as jwt from 'jsonwebtoken';
 import * as jwksClient from 'jwks-rsa';
-import jwtDecode, { JwtHeader } from 'jwt-decode';
+import { jwtDecode, JwtHeader } from 'jwt-decode';
 import { AxiosService } from 'src/utils/http/axios.service';
 import { IVerifyInfo } from '../auth.interface';
 

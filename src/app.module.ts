@@ -22,7 +22,6 @@ import { DatabaseConfig } from './utils/config/database.config';
 import { LANGUAGE, NODE_ENV } from './utils/constant/constant';
 import { AnyExceptionFilter } from './utils/filter/exception.filter';
 import { VersionsModule } from './versions/versions.module';
-import { ChatGptModule } from './chat-gpt/chat-gpt.module';
 import { CacheModule } from '@nestjs/cache-manager';
 import { LoggerModule } from 'nestjs-pino';
 
@@ -83,7 +82,6 @@ import { LoggerModule } from 'nestjs-pino';
     VersionsModule,
     PublicsModule,
     CommonsModule,
-    ChatGptModule,
   ],
   providers: [
     {

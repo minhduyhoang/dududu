@@ -1,7 +1,7 @@
 import { ForbiddenException, Injectable, forwardRef, Inject } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
-import { DataSource, In, Not, QueryRunner, Repository } from 'typeorm';
+import { DataSource, Equal, ILike, In, Like, Not, Or, QueryRunner, Repository } from 'typeorm';
 import { CACHE_PROFILE, CACHE_SESSION } from 'src/cache/cache.constant';
 import { CacheService } from 'src/cache/cache.service';
 import { Condition } from 'src/utils/common/query.common';
