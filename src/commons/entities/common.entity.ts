@@ -3,9 +3,9 @@ import { Column, Entity } from "typeorm";
 
 @Entity()
 export class Common extends BaseEntityCustom {
-  @Column('text')
+  @Column("text")
   key: string;
 
-  @Column('text', { nullable: true })
+  @Column("text", { nullable: true })
   value: string;
 }

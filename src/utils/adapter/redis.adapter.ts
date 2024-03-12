@@ -1,7 +1,7 @@
-import { IoAdapter } from '@nestjs/platform-socket.io';
-import { createClient } from 'redis';
-import { ServerOptions } from 'socket.io';
-import { createAdapter } from '@socket.io/redis-adapter';
+import { IoAdapter } from "@nestjs/platform-socket.io";
+import { createClient } from "redis";
+import { ServerOptions } from "socket.io";
+import { createAdapter } from "@socket.io/redis-adapter";
 
 const pubClient = createClient({
   url: `redis://default:${process.env.REDIS_PASSWORD}@${process.env.REDIS_HOST}:${process.env.REDIS_PORT}`, // redis[s]://[[username][:password]@][host][:port][/db-number]

@@ -1,8 +1,8 @@
-import { Injectable } from '@nestjs/common';
-import * as firebase from 'firebase-admin';
-import { messaging } from 'firebase-admin';
-import { IVerifyInfo } from 'src/auth/auth.interface';
-import * as firebaseConfig from './firebase.config.json';
+import { Injectable } from "@nestjs/common";
+import * as firebase from "firebase-admin";
+import { messaging } from "firebase-admin";
+import { IVerifyInfo } from "src/auth/auth.interface";
+import * as firebaseConfig from "./firebase.config.json";
 
 const firebase_params = {
   type: firebaseConfig.type,
@@ -29,7 +29,7 @@ export class FirebaseService {
         .auth()
         .verifyIdToken(token, true)
         .catch((error) => {
-          console.log('GOOGLE VERIFY FAIL: ', error);
+          console.log("GOOGLE VERIFY FAIL: ", error);
           return false;
         });
 
@@ -44,12 +44,16 @@ export class FirebaseService {
 
       return verifyData;
     } catch (error) {
-      console.log('GOOGLE VERIFY FAIL: ', error);
+      console.log("GOOGLE VERIFY FAIL: ", error);
       return { error: true };
     }
   }
 
-  public async sendToTopic(topic: string, notification: any, dataSend?: {}): Promise<void> {
+  public async sendToTopic(
+    topic: string,
+    notification: any,
+    dataSend?: {},
+  ): Promise<void> {
     let message: messaging.MessagingPayload = {
       notification: notification,
       data: dataSend,
@@ -59,25 +63,28 @@ export class FirebaseService {
       .messaging()
       .sendToTopic(topic, message)
       .then((response) => {
-        console.log('Successfully sent message: ', topic);
+        console.log("Successfully sent message: ", topic);
         console.log(response);
       })
       .catch((error) => {
-        console.error('Error sending message: ', topic);
+        console.error("Error sending message: ", topic);
         console.error(error);
       });
   }
 
-  public async sendToDevice(deviceTokens: string[], payload: messaging.MessagingPayload): Promise<void> {
+  public async sendToDevice(
+    deviceTokens: string[],
+    payload: messaging.MessagingPayload,
+  ): Promise<void> {
     const message = {
       tokens: deviceTokens,
       notification: {
-        title: 'abcd',
-        body: 'abcd',
+        title: "abcd",
+        body: "abcd",
       },
       data: {
-        score: '850',
-        time: '2:45',
+        score: "850",
+        time: "2:45",
       },
     };
 
@@ -85,43 +92,50 @@ export class FirebaseService {
       .messaging()
       .sendEachForMulticast(message)
       .then((res: messaging.BatchResponse) => {
-        console.log('Res push noti:', res?.responses[0]);
+        console.log("Res push noti:", res?.responses[0]);
 
-        if (res.successCount && res.successCount === 1) console.log('Successfully sent message');
-        else console.log('Error sending message');
+        if (res.successCount && res.successCount === 1)
+          console.log("Successfully sent message");
+        else console.log("Error sending message");
       })
       .catch((error) => {
-        console.log('error', error);
-        return console.log('Error sending message');
+        console.log("error", error);
+        return console.log("Error sending message");
       });
   }
 
-  public async subscribeTopic(deviceTokens: string | string[], topicName: string): Promise<void> {
-    if (typeof deviceTokens === 'string') deviceTokens = [deviceTokens];
+  public async subscribeTopic(
+    deviceTokens: string | string[],
+    topicName: string,
+  ): Promise<void> {
+    if (typeof deviceTokens === "string") deviceTokens = [deviceTokens];
 
     firebaseAdmin
       .messaging()
       .subscribeToTopic(deviceTokens, topicName)
       .then((response) => {
-        console.log('Successfully subscribe device to topic: ', topicName);
+        console.log("Successfully subscribe device to topic: ", topicName);
         console.log(response);
       })
       .catch((error) => {
-        console.error('Error subscribe device to topic: ', topicName);
+        console.error("Error subscribe device to topic: ", topicName);
         console.error(error);
       });
   }
 
-  public async unSubscribeTopic(deviceTokens: string[], topicName: string): Promise<void> {
+  public async unSubscribeTopic(
+    deviceTokens: string[],
+    topicName: string,
+  ): Promise<void> {
     firebaseAdmin
       .messaging()
       .unsubscribeFromTopic(deviceTokens, topicName)
       .then((response) => {
-        console.log('Successfully unsubscribe device to topic: ', topicName);
+        console.log("Successfully unsubscribe device to topic: ", topicName);
         console.log(response);
       })
       .catch((error) => {
-        console.error('Error unsubscribe device to topic: ', topicName);
+        console.error("Error unsubscribe device to topic: ", topicName);
         console.error(error);
       });
   }

@@ -1,35 +1,34 @@
-import { BaseEntityCustom } from 'src/utils/entity/BaseEntity';
-import { BeforeInsert, BeforeUpdate, Column, Entity, Index } from 'typeorm';
-import { VERSION_STATUS } from '../versions.constant';
+import { BaseEntityCustom } from "src/utils/entity/BaseEntity";
+import { BeforeInsert, BeforeUpdate, Column, Entity, Index } from "typeorm";
+import { VERSION_STATUS } from "../versions.constant";
 
 const versionToNum = (version: string) => {
-  const versionToArr = version.split('.');
+  const versionToArr = version.split(".");
 
   return Number(
     versionToArr.reduce((old, version) => {
-      return (old += version.padStart(3, '0'));
-    }, '')
+      return (old += version.padStart(3, "0"));
+    }, ""),
   );
 };
-
 
 @Entity()
 export class Version extends BaseEntityCustom {
   @Index()
   @Column({
-    type: 'enum',
+    type: "enum",
     enum: VERSION_STATUS,
     default: VERSION_STATUS.ACTIVE,
   })
   status: VERSION_STATUS;
 
-  @Column('varchar')
+  @Column("varchar")
   version: string;
 
-  @Column('boolean', { default: false })
+  @Column("boolean", { default: false })
   forceUpdate: boolean;
 
-  @Column('text', { nullable: true })
+  @Column("text", { nullable: true })
   note: string;
 
   @Index()
@@ -38,11 +37,11 @@ export class Version extends BaseEntityCustom {
   })
   versionNum: number;
 
-  @Column('simple-array')
+  @Column("simple-array")
   versionArray: number[];
 
   @Column({
-    type: 'timestamp',
+    type: "timestamp",
     nullable: true,
   })
   plannedUpdate: Date;

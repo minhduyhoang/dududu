@@ -1,20 +1,28 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
-import { UsersService } from '../users/users.service';
-import { CacheTtlSeconds, CACHE_SESSION } from 'src/cache/cache.constant';
-import { CacheService } from 'src/cache/cache.service';
-import { FirebaseService } from 'src/firebase/firebase.service';
-import { ETokenType, IToken, IVerifyInfo } from '../auth/auth.interface';
-import { SessionsService } from '../sessions/sessions.service';
-import { UserLoginDto, UserLoginSNSDto, UserRegisterDto } from '../users/dto/user.dto';
-import { IReqUser, ISuccessResponse, Response } from '../utils/interface/common.interface';
-import { AuthErrorMessage } from './auth.error';
-import { AppleAuthService } from './services/apple-auth.service';
-import { KaKaoAuthService } from './services/kakao-auth.service';
-import { NaverAuthService } from './services/naver-auth.service';
-import { USER_TYPE } from 'src/users/users.constant';
-import { ConfigService } from '@nestjs/config';
-import { Socket } from 'socket.io';
+import { forwardRef, Inject, Injectable } from "@nestjs/common";
+import { JwtService } from "@nestjs/jwt";
+import { UsersService } from "../users/users.service";
+import { CacheTtlSeconds, CACHE_SESSION } from "src/cache/cache.constant";
+import { CacheService } from "src/cache/cache.service";
+import { FirebaseService } from "src/firebase/firebase.service";
+import { ETokenType, IToken, IVerifyInfo } from "../auth/auth.interface";
+import { SessionsService } from "../sessions/sessions.service";
+import {
+  UserLoginDto,
+  UserLoginSNSDto,
+  UserRegisterDto,
+} from "../users/dto/user.dto";
+import {
+  IReqUser,
+  ISuccessResponse,
+  Response,
+} from "../utils/interface/common.interface";
+import { AuthErrorMessage } from "./auth.error";
+import { AppleAuthService } from "./services/apple-auth.service";
+import { KaKaoAuthService } from "./services/kakao-auth.service";
+import { NaverAuthService } from "./services/naver-auth.service";
+import { USER_TYPE } from "src/users/users.constant";
+import { ConfigService } from "@nestjs/config";
+import { Socket } from "socket.io";
 
 @Injectable()
 export class AuthService {
@@ -29,7 +37,7 @@ export class AuthService {
     private readonly naverAuthService: NaverAuthService,
     private readonly kakaoAuthService: KaKaoAuthService,
     private readonly cacheService: CacheService,
-    private configService: ConfigService
+    private configService: ConfigService,
   ) {}
 
   async login(userLoginDto: UserLoginDto): Promise<ISuccessResponse> {
@@ -51,11 +59,15 @@ export class AuthService {
     };
 
     const tokens = {
-      accessToken: this.jwtService.sign(accessPayload, { expiresIn: '1d' }),
+      accessToken: this.jwtService.sign(accessPayload, { expiresIn: "1d" }),
       refreshToken: this.jwtService.sign(refreshPayload),
     };
 
-    await this.cacheService.set(`${CACHE_SESSION}:${String(session.id)}`, session.language, CacheTtlSeconds.ONE_DAY);
+    await this.cacheService.set(
+      `${CACHE_SESSION}:${String(session.id)}`,
+      session.language,
+      CacheTtlSeconds.ONE_DAY,
+    );
 
     return Response.success({ user, tokens });
   }
@@ -108,11 +120,15 @@ export class AuthService {
     };
 
     const tokens = {
-      accessToken: this.jwtService.sign(accessPayload, { expiresIn: '1d' }),
+      accessToken: this.jwtService.sign(accessPayload, { expiresIn: "1d" }),
       refreshToken: this.jwtService.sign(refreshPayload),
     };
 
-    await this.cacheService.set(`${CACHE_SESSION}:${String(session.id)}`, session.language, CacheTtlSeconds.ONE_DAY);
+    await this.cacheService.set(
+      `${CACHE_SESSION}:${String(session.id)}`,
+      session.language,
+      CacheTtlSeconds.ONE_DAY,
+    );
 
     return Response.success({ user, tokens });
   }
@@ -134,7 +150,7 @@ export class AuthService {
       tokenType: ETokenType.access,
     };
     const accessToken = this.jwtService.sign(accessPayload, {
-      expiresIn: '1d',
+      expiresIn: "1d",
     });
 
     return Response.success({ accessToken });
@@ -159,11 +175,15 @@ export class AuthService {
     };
 
     const tokens = {
-      accessToken: this.jwtService.sign(accessPayload, { expiresIn: '1d' }),
+      accessToken: this.jwtService.sign(accessPayload, { expiresIn: "1d" }),
       refreshToken: this.jwtService.sign(refreshPayload),
     };
 
-    await this.cacheService.set(`${CACHE_SESSION}:${String(session.id)}`, session.language, CacheTtlSeconds.ONE_DAY);
+    await this.cacheService.set(
+      `${CACHE_SESSION}:${String(session.id)}`,
+      session.language,
+      CacheTtlSeconds.ONE_DAY,
+    );
 
     return Response.success({ user, tokens });
   }
@@ -174,7 +194,7 @@ export class AuthService {
       socket.disconnect();
     }
     const payload: IToken = await this.jwtService.verify(token, {
-      secret: this.configService.get('JWT_SECRET'),
+      secret: this.configService.get("JWT_SECRET"),
     });
 
     if (!payload) {

@@ -20,7 +20,7 @@ import { UsersModule } from "./users/users.module";
 import { config, configValidationSchema } from "./utils/config/config";
 import { DatabaseConfig } from "./utils/config/database.config";
 import { LANGUAGE, NODE_ENV } from "./utils/constant/constant";
-import { AnyExceptionFilter } from "./utils/filter/exception.filter";
+import { AnyExceptionFilter } from "./utils/exception/http.exception";
 import { VersionsModule } from "./versions/versions.module";
 import { CacheModule } from "@nestjs/cache-manager";
 import { LoggerModule } from "nestjs-pino";

@@ -5,5 +5,5 @@ export enum CacheTtlSeconds {
   ONE_WEEK = 7 * 24 * 60 * 60,
 }
 
-export const CACHE_SESSION = 'session';
-export const CACHE_PROFILE = 'profile';
+export const CACHE_SESSION = "session";
+export const CACHE_PROFILE = "profile";

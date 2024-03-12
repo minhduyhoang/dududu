@@ -1,7 +1,7 @@
-import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { AxiosService } from 'src/utils/http/axios.service';
-import { IVerifyInfo } from '../auth.interface';
+import { Injectable } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
+import { AxiosService } from "src/utils/http/axios.service";
+import { IVerifyInfo } from "../auth.interface";
 
 @Injectable()
 export class NaverAuthService {
@@ -11,7 +11,7 @@ export class NaverAuthService {
     private readonly configService: ConfigService,
     private readonly axiosService: AxiosService,
   ) {
-    this.clientHost = this.configService.get<string>('NAVER_AUTH_ACCESS_LINK');
+    this.clientHost = this.configService.get<string>("NAVER_AUTH_ACCESS_LINK");
   }
 
   public async authenticate(
@@ -33,7 +33,7 @@ export class NaverAuthService {
 
       return verifyData;
     } catch (error) {
-      console.error('KAKAO VERIFY FAIL: ', error);
+      console.error("KAKAO VERIFY FAIL: ", error);
 
       return { error: true };
     }

@@ -1,4 +1,14 @@
-import { IsString, IsInt, Min, Max, IsOptional, IsIn, MinLength, IsDate } from 'class-validator';
+import { Transform } from "class-transformer";
+import {
+  IsString,
+  IsInt,
+  Min,
+  Max,
+  IsOptional,
+  IsIn,
+  MinLength,
+  IsDate,
+} from "class-validator";
 
 export class PaginationDto {
   @IsInt()
@@ -14,8 +24,12 @@ export class PaginationDto {
 
   @IsString()
   @IsOptional()
-  @IsIn(Object.values(['ASC', 'DESC']))
-  order: 'ASC' | 'DESC' = 'DESC';
+  @IsIn(Object.values(["ASC", "DESC"]))
+  order: "ASC" | "DESC" = "DESC";
+
+  @IsOptional()
+  @Transform(({ value }) => value.split(","))
+  ids?: number[];
 }
 
 export class KeywordDto {

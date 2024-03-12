@@ -1,24 +1,31 @@
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { AWSService } from 'src/aws/aws.service';
-import { Response } from 'src/utils/interface/response.interface';
-import { QueryRunner, Repository } from 'typeorm';
-import { UPLOAD_STATUS, FOLDER_CONSTANT } from './uploads.constant';
-import { Uploads } from './entities/upload.entity';
-import { UploadsErrorMessage } from './uploads.error';
+import { Injectable } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { AWSService } from "src/aws/aws.service";
+import { Response } from "src/utils/interface/response.interface";
+import { QueryRunner, Repository } from "typeorm";
+import { UPLOAD_STATUS, FOLDER_CONSTANT } from "./uploads.constant";
+import { Uploads } from "./entities/upload.entity";
+import { UploadsErrorMessage } from "./uploads.error";
 
 @Injectable()
 export class UploadsService {
-  constructor(@InjectRepository(Uploads) private uploadsRepository: Repository<Uploads>, private awsService: AWSService) {}
+  constructor(
+    @InjectRepository(Uploads) private uploadsRepository: Repository<Uploads>,
+    private awsService: AWSService,
+  ) {}
 
-  truncateString(text: string = '') {
+  truncateString(text: string = "") {
     text = text.toLowerCase();
-    text = text.replace(/[&\/\\#, +()$~%'":*?<>{}]/g, '');
-    text = text.replace(/^-*|-*$|(-)-*/g, '$1');
+    text = text.replace(/[&\/\\#, +()$~%'":*?<>{}]/g, "");
+    text = text.replace(/^-*|-*$|(-)-*/g, "$1");
     return text;
   }
 
-  async upload(fileUpload: Express.Multer.File, folder: FOLDER_CONSTANT = FOLDER_CONSTANT.COMMON, queryRunner?: QueryRunner): Promise<Uploads> {
+  async upload(
+    fileUpload: Express.Multer.File,
+    folder: FOLDER_CONSTANT = FOLDER_CONSTANT.COMMON,
+    queryRunner?: QueryRunner,
+  ): Promise<Uploads> {
     const fileName = this.awsService.truncateString(fileUpload.originalname);
     const key: string = `${folder}/${new Date().getUTCFullYear()}/${new Date().getUTCMonth() + 1}/${Date.now()}-${fileName}`;
 
@@ -75,7 +82,10 @@ export class UploadsService {
     });
 
     if (fileUpload) {
-      await Promise.all([this.awsService.deleteFile(fileUpload.key), this.uploadsRepository.softDelete(id)]);
+      await Promise.all([
+        this.awsService.deleteFile(fileUpload.key),
+        this.uploadsRepository.softDelete(id),
+      ]);
     }
   }
 }

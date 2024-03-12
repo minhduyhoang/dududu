@@ -1,5 +1,5 @@
-import { IsString, IsNotEmpty, IsIn } from 'class-validator';
-import { LANGUAGE } from '../../utils/constant/constant';
+import { IsString, IsNotEmpty, IsIn } from "class-validator";
+import { LANGUAGE } from "../../utils/constant/constant";
 
 export class ChangeLanguageDto {
   @IsString()

@@ -1,5 +1,5 @@
-import { IntersectionType } from '@nestjs/swagger';
-import { Type } from 'class-transformer';
+import { IntersectionType } from "@nestjs/swagger";
+import { Type } from "class-transformer";
 import {
   ArrayMinSize,
   IsBoolean,
@@ -13,10 +13,10 @@ import {
   MaxLength,
   MinLength,
   ValidateNested,
-} from 'class-validator';
-import { LANGUAGE } from 'src/utils/constant/constant';
-import { KeywordDto, PaginationDto } from '../../utils/dto/pagination.dto';
-import { USER_ROLE, USER_STATUS, USER_TYPE } from '../users.constant';
+} from "class-validator";
+import { LANGUAGE } from "src/utils/constant/constant";
+import { KeywordDto, PaginationDto } from "../../utils/dto/pagination.dto";
+import { USER_ROLE, USER_STATUS, USER_TYPE } from "../users.constant";
 
 export class UserLoginDto {
   @IsEmail()
@@ -30,9 +30,12 @@ export class UserLoginDto {
   @IsString()
   @MinLength(8)
   @MaxLength(50)
-  @Matches(/^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[@$!%*?&])([a-zA-Z0-9@$!%*?&]{8,})$/, {
-    message: 'password too weak',
-  })
+  @Matches(
+    /^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[@$!%*?&])([a-zA-Z0-9@$!%*?&]{8,})$/,
+    {
+      message: "password too weak",
+    },
+  )
   @IsNotEmpty()
   password: string;
 
@@ -71,9 +74,12 @@ export class UserRegisterDto {
   @IsString()
   @MinLength(8)
   @MaxLength(50)
-  @Matches(/^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[@$!%*?&])([a-zA-Z0-9@$!%*?&]{8,})$/, {
-    message: 'password too weak',
-  })
+  @Matches(
+    /^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[@$!%*?&])([a-zA-Z0-9@$!%*?&]{8,})$/,
+    {
+      message: "password too weak",
+    },
+  )
   @IsNotEmpty()
   password: string;
 
@@ -120,9 +126,12 @@ export class CreateUserDto {
   @IsString()
   @MinLength(8)
   @MaxLength(50)
-  @Matches(/^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[@$!%*?&])([a-zA-Z0-9@$!%*?&]{8,})$/, {
-    message: 'password too weak',
-  })
+  @Matches(
+    /^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[@$!%*?&])([a-zA-Z0-9@$!%*?&]{8,})$/,
+    {
+      message: "password too weak",
+    },
+  )
   @IsNotEmpty()
   password: string;
 
@@ -198,9 +207,12 @@ export class AdminUpdateUserDto {
   @IsString()
   @MinLength(8)
   @MaxLength(50)
-  @Matches(/^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[@$!%*?&])([a-zA-Z0-9@$!%*?&]{8,})$/, {
-    message: 'password too weak',
-  })
+  @Matches(
+    /^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[@$!%*?&])([a-zA-Z0-9@$!%*?&]{8,})$/,
+    {
+      message: "password too weak",
+    },
+  )
   @IsOptional()
   password: string;
 }

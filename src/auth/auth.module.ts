@@ -1,21 +1,21 @@
-import { forwardRef, Module } from '@nestjs/common';
-import { JwtStrategy } from './strategies/jwt.strategy';
-import { JwtModule } from '@nestjs/jwt';
-import { PassportModule } from '@nestjs/passport';
-import { ConfigService } from '@nestjs/config';
-import { ConfigModule } from '@nestjs/config';
+import { forwardRef, Module } from "@nestjs/common";
+import { JwtStrategy } from "./strategies/jwt.strategy";
+import { JwtModule } from "@nestjs/jwt";
+import { PassportModule } from "@nestjs/passport";
+import { ConfigService } from "@nestjs/config";
+import { ConfigModule } from "@nestjs/config";
 
-import { AuthService } from './auth.service';
-import { UsersModule } from '../users/users.module';
-import { AuthController } from './auth.controller';
-import { JwtRefreshTokenStrategy } from './strategies/jwt-refresh.strategy';
-import { SessionsModule } from '../sessions/sessions.module';
-import { NaverAuthService } from './services/naver-auth.service';
-import { KaKaoAuthService } from './services/kakao-auth.service';
-import { HttpModule } from '@nestjs/axios';
-import { AxiosService } from 'src/utils/http/axios.service';
-import { AppleAuthService } from './services/apple-auth.service';
-import { FirebaseService } from 'src/firebase/firebase.service';
+import { AuthService } from "./auth.service";
+import { UsersModule } from "../users/users.module";
+import { AuthController } from "./auth.controller";
+import { JwtRefreshTokenStrategy } from "./strategies/jwt-refresh.strategy";
+import { SessionsModule } from "../sessions/sessions.module";
+import { NaverAuthService } from "./services/naver-auth.service";
+import { KaKaoAuthService } from "./services/kakao-auth.service";
+import { HttpModule } from "@nestjs/axios";
+import { AxiosService } from "src/utils/http/axios.service";
+import { AppleAuthService } from "./services/apple-auth.service";
+import { FirebaseService } from "src/firebase/firebase.service";
 
 @Module({
   imports: [
@@ -25,7 +25,7 @@ import { FirebaseService } from 'src/firebase/firebase.service';
     JwtModule.registerAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
-        secret: configService.get('JWT_SECRET'),
+        secret: configService.get("JWT_SECRET"),
       }),
       inject: [ConfigService],
     }),
@@ -34,7 +34,16 @@ import { FirebaseService } from 'src/firebase/firebase.service';
       maxRedirects: 5,
     }),
   ],
-  providers: [AuthService, AppleAuthService, NaverAuthService, KaKaoAuthService, AxiosService, JwtStrategy, JwtRefreshTokenStrategy, FirebaseService],
+  providers: [
+    AuthService,
+    AppleAuthService,
+    NaverAuthService,
+    KaKaoAuthService,
+    AxiosService,
+    JwtStrategy,
+    JwtRefreshTokenStrategy,
+    FirebaseService,
+  ],
   exports: [AuthService, JwtStrategy, JwtRefreshTokenStrategy],
   controllers: [AuthController],
 })

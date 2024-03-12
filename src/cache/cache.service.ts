@@ -1,9 +1,9 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { Cache } from 'cache-manager';
+import { Inject, Injectable } from "@nestjs/common";
+import { Cache } from "cache-manager";
 
 @Injectable()
 export class CacheService {
-  constructor(@Inject('CACHE_MANAGER') private cacheManager: Cache) {}
+  constructor(@Inject("CACHE_MANAGER") private cacheManager: Cache) {}
 
   private defaultTtl = 3600000; // 1 hour
 
@@ -14,7 +14,7 @@ export class CacheService {
       await Promise.all(
         userCaches.map(async (item) => {
           return this.cacheManager.del(item);
-        })
+        }),
       );
     }
   }
@@ -35,10 +35,15 @@ export class CacheService {
     }
   }
 
-  async set(key: string, value: string | Record<string, any>, ttlInSec?: number): Promise<any> {
+  async set(
+    key: string,
+    value: string | Record<string, any>,
+    ttlInSec?: number,
+  ): Promise<any> {
     const ttl = ttlInSec ? ttlInSec : this.defaultTtl;
 
-    if (ttl >= 0) await this.cacheManager.set(key, JSON.stringify(value), { ttl } as any);
+    if (ttl >= 0)
+      await this.cacheManager.set(key, JSON.stringify(value), { ttl } as any);
     else await this.cacheManager.set(key, JSON.stringify(value));
   }
 
@@ -58,7 +63,7 @@ export class CacheService {
     if (lock) {
       return true;
     } else {
-      await this.cacheManager.set(key, 'true', { ttl } as any);
+      await this.cacheManager.set(key, "true", { ttl } as any);
       return false;
     }
   }

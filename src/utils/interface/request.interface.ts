@@ -1,5 +1,5 @@
-import { USER_ROLE } from 'src/users/users.constant';
-import { LANGUAGE } from '../constant/constant';
+import { USER_ROLE } from "src/users/users.constant";
+import { LANGUAGE } from "../constant/constant";
 
 export interface IReqUser {
   userId: number;

@@ -1,8 +1,8 @@
-import { USER_ROLE } from 'src/users/users.constant';
+import { USER_ROLE } from "src/users/users.constant";
 
 export enum ETokenType {
-  access = 'ACCESS',
-  refresh = 'REFRESH',
+  access = "ACCESS",
+  refresh = "REFRESH",
 }
 
 export interface IToken {

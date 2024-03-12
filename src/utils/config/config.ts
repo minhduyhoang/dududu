@@ -1,4 +1,4 @@
-import * as Joi from 'joi';
+import * as Joi from "joi";
 
 export const configValidationSchema = Joi.object({
   PORT: Joi.number().required(),
@@ -7,7 +7,7 @@ export const configValidationSchema = Joi.object({
   DB_HOST: Joi.string().required(),
   DB_PORT: Joi.number().required(),
   DB_USER: Joi.string().required(),
-  DB_PASSWORD: Joi.string().allow('', null),
+  DB_PASSWORD: Joi.string().allow("", null),
   DB_NAME: Joi.string().required(),
   REDIS_HOST: Joi.string().required(),
   REDIS_PORT: Joi.number().required(),
@@ -40,11 +40,12 @@ export const config = () => ({
     username: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
-    entities: ['dist/**/*.entity{.ts,.js}'],
+    entities: ["dist/**/*.entity{.ts,.js}"],
     synchronize: !!process.env.SYNCHRONIZE_DATA,
     bigNumberStrings: false,
     supportBigNumbers: true,
     logging: false,
+    // relationLoadStrategy: "query",
     extra: {
       decimalNumbers: true,
     },

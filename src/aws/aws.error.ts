@@ -1,5 +1,5 @@
-import { AWS_ERROR } from 'src/utils/error/code.error';
-import { ErrorResponse } from '../utils/interface/response.interface';
+import { AWS_ERROR } from "src/utils/error/code.error";
+import { ErrorResponse } from "../utils/interface/response.interface";
 
 class AWSError extends ErrorResponse {
   private errorCode = AWS_ERROR.CODE;

@@ -1,5 +1,5 @@
-import { UPLOAD_ERROR } from 'src/utils/error/code.error';
-import { ErrorResponse } from '../utils/interface/response.interface';
+import { UPLOAD_ERROR } from "src/utils/error/code.error";
+import { ErrorResponse } from "../utils/interface/response.interface";
 
 class UploadsError extends ErrorResponse {
   private errorCode = UPLOAD_ERROR.CODE;

@@ -1,9 +1,9 @@
-import { Module } from '@nestjs/common';
-import { CommonsService } from './commons.service';
-import { CommonsController } from './commons.controller';
+import { Module } from "@nestjs/common";
+import { CommonsService } from "./commons.service";
+import { CommonsController } from "./commons.controller";
 
 @Module({
   controllers: [CommonsController],
-  providers: [CommonsService]
+  providers: [CommonsService],
 })
 export class CommonsModule {}

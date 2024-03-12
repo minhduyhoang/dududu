@@ -1,11 +1,11 @@
-import { Injectable } from '@nestjs/common';
-import { CreateVersionDto } from './dto/create-version.dto';
-import { UpdateVersionDto } from './dto/update-version.dto';
+import { Injectable } from "@nestjs/common";
+import { CreateVersionDto } from "./dto/create-version.dto";
+import { UpdateVersionDto } from "./dto/update-version.dto";
 
 @Injectable()
 export class VersionsService {
   create(createVersionDto: CreateVersionDto) {
-    return 'This action adds a new version';
+    return "This action adds a new version";
   }
 
   findAll() {

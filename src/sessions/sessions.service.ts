@@ -1,18 +1,18 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { CacheTtlSeconds, CACHE_SESSION } from 'src/cache/cache.constant';
-import { CacheService } from 'src/cache/cache.service';
-import { USER_ROLE, USER_STATUS } from 'src/users/users.constant';
-import { UsersErrorMessage } from 'src/users/users.error';
-import { UsersService } from 'src/users/users.service';
-import { LANGUAGE } from 'src/utils/constant/constant';
-import { IReqUser } from 'src/utils/interface/request.interface';
-import { Response } from 'src/utils/interface/response.interface';
-import { In, QueryRunner, Repository } from 'typeorm';
-import { Users } from '../users/entities/user.entity';
-import { SESSION_STATUS } from './sessions.constant';
-import { ChangeLanguageDto } from './dto/session.dto';
-import { Sessions } from './entities/session.entity';
+import { forwardRef, Inject, Injectable } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { CacheTtlSeconds, CACHE_SESSION } from "src/cache/cache.constant";
+import { CacheService } from "src/cache/cache.service";
+import { USER_ROLE, USER_STATUS } from "src/users/users.constant";
+import { UsersErrorMessage } from "src/users/users.error";
+import { UsersService } from "src/users/users.service";
+import { LANGUAGE } from "src/utils/constant/constant";
+import { IReqUser } from "src/utils/interface/request.interface";
+import { Response } from "src/utils/interface/response.interface";
+import { In, QueryRunner, Repository } from "typeorm";
+import { Users } from "../users/entities/user.entity";
+import { SESSION_STATUS } from "./sessions.constant";
+import { ChangeLanguageDto } from "./dto/session.dto";
+import { Sessions } from "./entities/session.entity";
 
 @Injectable()
 export class SessionsService {
@@ -21,7 +21,7 @@ export class SessionsService {
     private sessionRepository: Repository<Sessions>,
     @Inject(forwardRef(() => UsersService))
     private usersService: UsersService,
-    private cacheService: CacheService
+    private cacheService: CacheService,
   ) {}
   async findBySessionId(sessionId: number, userId: number): Promise<Sessions> {
     const user = await this.usersService.getOne(userId);
@@ -45,7 +45,7 @@ export class SessionsService {
       { id: sessionId },
       {
         status: SESSION_STATUS.DEACTIVATED,
-      }
+      },
     );
   }
 
@@ -69,24 +69,38 @@ export class SessionsService {
 
   async createSession(user: Users, language: LANGUAGE): Promise<Sessions> {
     if (user.role !== USER_ROLE.ADMIN && user.role !== USER_ROLE.SUPER_ADMIN) {
-      await this.sessionRepository.update({ user: { id: user.id } }, { status: SESSION_STATUS.REMOVED });
+      await this.sessionRepository.update(
+        { user: { id: user.id } },
+        { status: SESSION_STATUS.REMOVED },
+      );
     }
     return this.sessionRepository.save({ user, language });
   }
 
-  async changeLanguage(reqUser: IReqUser, changeLanguageDto: ChangeLanguageDto): Promise<void> {
+  async changeLanguage(
+    reqUser: IReqUser,
+    changeLanguageDto: ChangeLanguageDto,
+  ): Promise<void> {
     await Promise.all([
-      this.cacheService.set(`${CACHE_SESSION}:${String(reqUser.sessionId)}`, changeLanguageDto.language, CacheTtlSeconds.ONE_DAY),
+      this.cacheService.set(
+        `${CACHE_SESSION}:${String(reqUser.sessionId)}`,
+        changeLanguageDto.language,
+        CacheTtlSeconds.ONE_DAY,
+      ),
       this.sessionRepository.update(
         {
           id: reqUser.sessionId,
         },
-        changeLanguageDto
+        changeLanguageDto,
       ),
     ]);
   }
 
   async removeByUserIds(userIds: number[], queryRunner: QueryRunner) {
-    return queryRunner.manager.update(Sessions, { user: { id: In(userIds) } }, { status: SESSION_STATUS.REMOVED });
+    return queryRunner.manager.update(
+      Sessions,
+      { user: { id: In(userIds) } },
+      { status: SESSION_STATUS.REMOVED },
+    );
   }
 }

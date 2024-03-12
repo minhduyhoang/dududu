@@ -1,4 +1,4 @@
-import { ErrorResponse } from '../utils/interface/common.interface';
+import { ErrorResponse } from "../utils/interface/common.interface";
 
 class SessionsError extends ErrorResponse {
   constructor(error) {

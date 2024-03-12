@@ -1,14 +1,20 @@
-import { forwardRef, Inject } from '@nestjs/common';
-import { OnGatewayConnection, OnGatewayDisconnect, SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
-import { Server, Socket } from 'socket.io';
-import { UsersService } from './users.service';
+import { forwardRef, Inject } from "@nestjs/common";
+import {
+  OnGatewayConnection,
+  OnGatewayDisconnect,
+  SubscribeMessage,
+  WebSocketGateway,
+  WebSocketServer,
+} from "@nestjs/websockets";
+import { Server, Socket } from "socket.io";
+import { UsersService } from "./users.service";
 
 @WebSocketGateway(3006, {
-  transports: ['websocket', 'polling', 'flashsocket'],
+  transports: ["websocket", "polling", "flashsocket"],
   cors: {
-    origin: '*',
-    methods: ['PUT', 'GET', 'POST', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['my-custom-header'],
+    origin: "*",
+    methods: ["PUT", "GET", "POST", "DELETE", "OPTIONS"],
+    allowedHeaders: ["my-custom-header"],
     credentials: true,
   },
 })
@@ -17,7 +23,7 @@ export class UsersGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   constructor(
     @Inject(forwardRef(() => UsersService))
-    private readonly usersService: UsersService
+    private readonly usersService: UsersService,
   ) {}
 
   async handleConnection(socket: Socket) {
@@ -28,25 +34,25 @@ export class UsersGateway implements OnGatewayConnection, OnGatewayDisconnect {
   }
   handleDisconnect(socket: Socket) {}
 
-  @SubscribeMessage('connected-socket')
+  @SubscribeMessage("connected-socket")
   handleMessage(socket: Socket, payload: any): void {
-    console.log('test asdsadasdasd');
+    console.log("test asdsadasdasd");
   }
 
-  @SubscribeMessage('message')
+  @SubscribeMessage("message")
   handleMessageA(socket: Socket, payload: any): void {
-    console.log('message', payload);
-    this.io.emit('connected', 'This is test');
+    console.log("message", payload);
+    this.io.emit("connected", "This is test");
   }
 
-  @SubscribeMessage('hello')
+  @SubscribeMessage("hello")
   handleMessageHello(socket: Socket, payload: any): void {
-    console.log('hello', payload);
-    socket.to('some room').emit('some event');
+    console.log("hello", payload);
+    socket.to("some room").emit("some event");
   }
 
   test(): void {
-    this.io.to('some room').emit('some event', 'asdasdasdasdasdasd');
+    this.io.to("some room").emit("some event", "asdasdasdasdasdasd");
   }
 
   // @UseGuards(AuthGuard)

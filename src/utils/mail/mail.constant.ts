@@ -1,7 +1,7 @@
 export enum MailTemplate {
-  Common = 'common',
+  Common = "common",
 }
 
 export enum MailSubject {
-  AAAA = '[aaaa] bbbb.',
+  AAAA = "[aaaa] bbbb.",
 }

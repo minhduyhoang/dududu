@@ -13,7 +13,12 @@ export interface IPagination {
 }
 
 class PaginationFormat {
-  public create(data: any[] = [], total: number = 0, currentPage: number = 0, limit: number = 10): IPagination {
+  public create(
+    data: any[] = [],
+    total: number = 0,
+    currentPage: number = 0,
+    limit: number = 10,
+  ): IPagination {
     const totalPages = Math.ceil(total / limit);
     const nextPage = currentPage + 1;
     const previousPage = currentPage - 1;

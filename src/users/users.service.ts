@@ -1,21 +1,48 @@
-import { ForbiddenException, Injectable, forwardRef, Inject } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import * as bcrypt from 'bcrypt';
-import { DataSource, Equal, ILike, In, Like, Not, Or, QueryRunner, Repository } from 'typeorm';
-import { CACHE_PROFILE, CACHE_SESSION } from 'src/cache/cache.constant';
-import { CacheService } from 'src/cache/cache.service';
-import { Condition } from 'src/utils/common/query.common';
-import { Sessions } from '../sessions/entities/session.entity';
-import { SessionsService } from '../sessions/sessions.service';
-import { IReqUser, ISuccessResponse, Pagination, Response } from '../utils/interface/common.interface';
-import { AdminUpdateUserDto, CreateUserDto, GetUsersDto, UpdateUserDto, UserLoginDto, UserRegisterDto } from './dto/user.dto';
-import { Users } from './entities/user.entity';
-import { UsersErrorMessage } from './users.error';
-import { USER_ROLE, USER_STATUS } from './users.constant';
-import { UsersGateway } from './users.gateway';
-import { Socket } from 'socket.io';
-import { AuthService } from 'src/auth/auth.service';
-import { AuthErrorMessage } from 'src/auth/auth.error';
+import {
+  ForbiddenException,
+  Injectable,
+  forwardRef,
+  Inject,
+} from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import * as bcrypt from "bcrypt";
+import {
+  DataSource,
+  Equal,
+  ILike,
+  In,
+  Like,
+  Not,
+  Or,
+  QueryRunner,
+  Repository,
+} from "typeorm";
+import { CACHE_PROFILE, CACHE_SESSION } from "src/cache/cache.constant";
+import { CacheService } from "src/cache/cache.service";
+import { Condition } from "src/utils/common/query.common";
+import { Sessions } from "../sessions/entities/session.entity";
+import { SessionsService } from "../sessions/sessions.service";
+import {
+  IReqUser,
+  ISuccessResponse,
+  Pagination,
+  Response,
+} from "../utils/interface/common.interface";
+import {
+  AdminUpdateUserDto,
+  CreateUserDto,
+  GetUsersDto,
+  UpdateUserDto,
+  UserLoginDto,
+  UserRegisterDto,
+} from "./dto/user.dto";
+import { Users } from "./entities/user.entity";
+import { UsersErrorMessage } from "./users.error";
+import { USER_ROLE, USER_STATUS } from "./users.constant";
+import { UsersGateway } from "./users.gateway";
+import { Socket } from "socket.io";
+import { AuthService } from "src/auth/auth.service";
+import { AuthErrorMessage } from "src/auth/auth.error";
 
 @Injectable()
 export class UsersService {
@@ -28,7 +55,7 @@ export class UsersService {
     private dataSource: DataSource,
     private usersGateway: UsersGateway,
     @Inject(forwardRef(() => AuthService))
-    private authService: AuthService
+    private authService: AuthService,
   ) {}
 
   async signIn(userLoginDto: UserLoginDto): Promise<[Users, Sessions]> {
@@ -76,18 +103,31 @@ export class UsersService {
         { id: user.id },
         {
           deviceToken: userLoginDto.deviceToken,
-        }
+        },
       );
     }
 
-    const session = await this.sessionService.createSession(user, userLoginDto.language);
+    const session = await this.sessionService.createSession(
+      user,
+      userLoginDto.language,
+    );
 
     return [user, session];
   }
 
-  async signInSNS({ socialId, userType, language, deviceToken }): Promise<[Users, Sessions]> {
+  async signInSNS({
+    socialId,
+    userType,
+    language,
+    deviceToken,
+  }): Promise<[Users, Sessions]> {
     let user = await this.userRepository.findOne({
-      where: { socialId, userType, role: USER_ROLE.USER, status: Not(USER_STATUS.REMOVED) },
+      where: {
+        socialId,
+        userType,
+        role: USER_ROLE.USER,
+        status: Not(USER_STATUS.REMOVED),
+      },
     });
 
     if (!user) {
@@ -129,7 +169,7 @@ export class UsersService {
     const conditions = Condition.create(getUsersDto);
 
     if (getUsersDto.role) {
-      conditions['role'] = getUsersDto.role;
+      conditions["role"] = getUsersDto.role;
     }
 
     const [users, total] = await this.userRepository.findAndCount({
@@ -159,7 +199,9 @@ export class UsersService {
   }
 
   async myProfile(reqUser: IReqUser): Promise<ISuccessResponse> {
-    const user = await this.userRepository.findOne({ where: { id: reqUser.userId } });
+    const user = await this.userRepository.findOne({
+      where: { id: reqUser.userId },
+    });
     return Response.success(user);
   }
 
@@ -195,16 +237,25 @@ export class UsersService {
     }
 
     const salt = await bcrypt.genSalt();
-    userRegisterDto.password = await bcrypt.hash(userRegisterDto.password, salt);
+    userRegisterDto.password = await bcrypt.hash(
+      userRegisterDto.password,
+      salt,
+    );
 
     const user = this.userRepository.create(userRegisterDto);
     await this.userRepository.save(user);
 
-    const session = await this.sessionService.createSession(user, userRegisterDto.language);
+    const session = await this.sessionService.createSession(
+      user,
+      userRegisterDto.language,
+    );
     return [user, session];
   }
 
-  async updateUser(reqUser: IReqUser, updateUserDto: UpdateUserDto): Promise<void> {
+  async updateUser(
+    reqUser: IReqUser,
+    updateUserDto: UpdateUserDto,
+  ): Promise<void> {
     const user = await this.userRepository.findOne({
       where: {
         id: reqUser.userId,
@@ -242,10 +293,16 @@ export class UsersService {
       }
     }
 
-    await Promise.all([this.userRepository.update({ id: reqUser.userId }, updateUserDto), this.cacheService.clearCacheByPattern(CACHE_PROFILE)]);
+    await Promise.all([
+      this.userRepository.update({ id: reqUser.userId }, updateUserDto),
+      this.cacheService.clearCacheByPattern(CACHE_PROFILE),
+    ]);
   }
 
-  async adminUpdateUser(id: number, adminUpdateUserDto: AdminUpdateUserDto): Promise<void> {
+  async adminUpdateUser(
+    id: number,
+    adminUpdateUserDto: AdminUpdateUserDto,
+  ): Promise<void> {
     const user = await this.userRepository.findOne({
       where: {
         id,
@@ -287,10 +344,16 @@ export class UsersService {
 
     if (adminUpdateUserDto.password) {
       const salt = await bcrypt.genSalt();
-      adminUpdateUserDto.password = await bcrypt.hash(adminUpdateUserDto.password, salt);
+      adminUpdateUserDto.password = await bcrypt.hash(
+        adminUpdateUserDto.password,
+        salt,
+      );
     }
 
-    await Promise.all([this.userRepository.update({ id }, adminUpdateUserDto), this.cacheService.clearCacheByPattern(CACHE_PROFILE)]);
+    await Promise.all([
+      this.userRepository.update({ id }, adminUpdateUserDto),
+      this.cacheService.clearCacheByPattern(CACHE_PROFILE),
+    ]);
   }
 
   async getOne(id: number): Promise<Users> {
@@ -339,10 +402,16 @@ export class UsersService {
 
       if (!user) throw Response.error(UsersErrorMessage.userNotFound());
 
-      const [session, update] = await Promise.all([this.sessionService.findByUser(user, queryRunner), queryRunner.manager.softDelete(Users, id)]);
+      const [session, update] = await Promise.all([
+        this.sessionService.findByUser(user, queryRunner),
+        queryRunner.manager.softDelete(Users, id),
+      ]);
 
       if (session) {
-        await Promise.all([this.cacheService.del(`${CACHE_SESSION}:${String(session.id)}`), this.sessionService.deactivateSession(session.id)]);
+        await Promise.all([
+          this.cacheService.del(`${CACHE_SESSION}:${String(session.id)}`),
+          this.sessionService.deactivateSession(session.id),
+        ]);
       }
 
       await queryRunner.commitTransaction();
@@ -354,7 +423,10 @@ export class UsersService {
     }
   }
 
-  async createAdmin(createUserDto: CreateUserDto, reqUser: IReqUser): Promise<Users> {
+  async createAdmin(
+    createUserDto: CreateUserDto,
+    reqUser: IReqUser,
+  ): Promise<Users> {
     const superAdmin = await this.userRepository.findOne({
       where: {
         id: reqUser.userId,

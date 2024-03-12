@@ -1,5 +1,5 @@
-import { USER_ERROR } from 'src/utils/error/code.error';
-import { ErrorResponse } from '../utils/interface/common.interface';
+import { USER_ERROR } from "src/utils/error/code.error";
+import { ErrorResponse } from "../utils/interface/common.interface";
 
 class UsersError extends ErrorResponse {
   private errorCode = USER_ERROR.CODE;
