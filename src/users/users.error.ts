@@ -1,33 +1,35 @@
+import { USER_ERROR } from 'src/utils/error/code.error';
 import { ErrorResponse } from '../utils/interface/common.interface';
 
 class UsersError extends ErrorResponse {
-  private fileName = 'user';
+  private errorCode = USER_ERROR.CODE;
+  private fileName = USER_ERROR.FILE;
   constructor(error) {
     super(error);
   }
 
   userNotFound(data?: any) {
-    return this.response('101', this.fileName, true, data);
+    return this.response(this.errorCode + 1, this.fileName, true, data);
   }
 
   accountNotExist() {
-    return this.response('102', this.fileName, true);
+    return this.response(this.errorCode + 2, this.fileName, true);
   }
 
   accountInActive() {
-    return this.response('103', this.fileName, true);
+    return this.response(this.errorCode + 3, this.fileName, true);
   }
 
   incorrectPassword() {
-    return this.response('104', this.fileName, true);
+    return this.response(this.errorCode + 4, this.fileName, true);
   }
 
   emailAlreadyExist() {
-    return this.response('105', this.fileName, true);
+    return this.response(this.errorCode + 5, this.fileName, true);
   }
 
   phoneNumberAlreadyExist() {
-    return this.response('106', this.fileName, true);
+    return this.response(this.errorCode + 6, this.fileName, true);
   }
 }
 

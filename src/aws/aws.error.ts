@@ -1,21 +1,23 @@
+import { AWS_ERROR } from 'src/utils/error/code.error';
 import { ErrorResponse } from '../utils/interface/response.interface';
 
 class AWSError extends ErrorResponse {
-  private fileName = 'aws';
+  private errorCode = AWS_ERROR.CODE;
+  private fileName = AWS_ERROR.FILE;
   constructor(error) {
     super(error);
   }
 
   uploadFailed() {
-    return this.response('401', this.fileName, true);
+    return this.response(this.errorCode + 1, this.fileName, true);
   }
 
   deleteFailed() {
-    return this.response('402', this.fileName, true);
+    return this.response(this.errorCode + 2, this.fileName, true);
   }
 
   onlyImagesAllowed() {
-    return this.response('403', this.fileName, true);
+    return this.response(this.errorCode + 3, this.fileName, true);
   }
 }
 

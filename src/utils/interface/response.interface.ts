@@ -28,8 +28,8 @@ export class ErrorResponse {
     this.data = error.data || {};
   }
 
-  response(code: string, file: string, isShow: boolean, data?: any) {
-    this.code = code;
+  response(code: number, file: string, isShow: boolean, data?: any) {
+    this.code = code?.toString().padStart(3, '0');
     this.file = file;
     this.isShow = isShow;
     this.data = data;

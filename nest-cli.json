@@ -5,6 +5,11 @@
     "assets": [
       "**/*.hbs",
       "i18n/**/*"
+    ],
+    "plugins": [
+      {
+        "name": "@nestjs/swagger"
+      }
     ]
   }
 }

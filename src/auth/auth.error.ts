@@ -1,29 +1,31 @@
+import { AWS_ERROR } from 'src/utils/error/code.error';
 import { ErrorResponse } from '../utils/interface/common.interface';
 
 class AuthError extends ErrorResponse {
-  private fileName = 'auth';
+  private errorCode = AWS_ERROR.CODE;
+  private fileName = AWS_ERROR.FILE;
   constructor(error) {
     super(error);
   }
 
   sessionExpired() {
-    return this.response('201', this.fileName, true);
+    return this.response(this.errorCode + 1, this.fileName, true);
   }
 
   invalidAccessToken() {
-    return this.response('202', this.fileName, true);
+    return this.response(this.errorCode + 2, this.fileName, true);
   }
 
   invalidRefreshToken() {
-    return this.response('203', this.fileName, true);
+    return this.response(this.errorCode + 3, this.fileName, true);
   }
 
   unauthorized() {
-    return this.response('204', this.fileName, true);
+    return this.response(this.errorCode + 4, this.fileName, true);
   }
 
   forbidden() {
-    return this.response('205', this.fileName, true);
+    return this.response(this.errorCode + 5, this.fileName, true);
   }
 }
 

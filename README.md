@@ -26,10 +26,29 @@
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
-## Installation
+## Installation and running the app
+
+Add firebase.config.json to `/src/firebase`
+```bash
+$ cd services
+$ cp .env.example .env
+$ docker-compose up -d
+$ cd ..
+$ cp .env.example .env
+$ docker-compose up -d
+```
+
+## Migration
 
 ```bash
-$ npm install
+# generate
+$ npm run migration:generate --name=fileName
+
+# run
+$ npm run migration:run
+
+# revert
+$ npm run migration:revert
 ```
 
 ## Running the app

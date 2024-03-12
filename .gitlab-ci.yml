@@ -1,0 +1,17 @@
+before_script:
+  - eval $(ssh-agent -s)
+  - echo "$ID_RSA_DEV" | tr -d '\r' | ssh-add -
+  - mkdir -p ~/.ssh
+  - chmod 700 ~/.ssh
+
+deploy_dev:
+  environment:
+    name: Deploy to dev
+  stage: deploy
+  script:
+    - echo "$USER_DEV@$IP_DEV"
+    - ssh-add <(echo "$ID_RSA_DEV")
+    - ssh -o StrictHostKeyChecking=no $USER_DEV@$IP_DEV "cd /home/ubuntu/backend && git pull && docker-compose restart" 
+    - ssh -o StrictHostKeyChecking=no $USER_DEV@$IP_DEV "docker exec -t backend npm run migration:run"
+  only:
+    - dev
