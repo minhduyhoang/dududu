@@ -1,0 +1,18 @@
+{
+  "apps": [
+    {
+      "name": "staging",
+      "script": "./dist/main.js",
+      "watch": true,
+      "force": true,
+      "instances": 3,
+      "ignore_watch": "node_modules",
+      "max_memory_restart": "2G",
+      "exec_mode": "cluster",
+      "env": {
+        "NODE_ENV": "staging",
+        "PORT": "3009"
+      }
+    }
+  ]
+}

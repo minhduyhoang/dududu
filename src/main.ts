@@ -15,9 +15,9 @@ async function bootstrap() {
   const configService = app.get(ConfigService);
   const port = configService.get("PORT");
 
-  app.useStaticAssets(join(__dirname, "..", "public"), {
-    prefix: "/public/",
-  });
+  // app.useStaticAssets(join(__dirname, "..", "public"), {
+  //   prefix: "/public/",
+  // });
 
   app.enableCors();
   app.useGlobalInterceptors(new LoggerErrorInterceptor());
@@ -52,26 +52,26 @@ async function bootstrap() {
     }
   });
 
-  if (process.env.NODE_ENV !== NODE_ENV.PRODUCTION) {
-    const config = new DocumentBuilder()
-      .setTitle("DIGGIN APIs")
-      .setDescription("DIGGIN APIs")
-      .setVersion("1.0")
-      .addBearerAuth(
-        {
-          description: `Please enter token`,
-          name: "Authorization",
-          bearerFormat: "Bearer",
-          scheme: "Bearer",
-          type: "http",
-          in: "Header",
-        },
-        "accessToken",
-      )
-      .build();
-    const document = SwaggerModule.createDocument(app, config);
-    SwaggerModule.setup("api/docs", app, document);
-  }
+  // if (process.env.NODE_ENV !== NODE_ENV.PRODUCTION) {
+  const config = new DocumentBuilder()
+    .setTitle("DIGGIN APIs")
+    .setDescription("DIGGIN APIs")
+    .setVersion("1.0")
+    .addBearerAuth(
+      {
+        description: `Please enter token`,
+        name: "Authorization",
+        bearerFormat: "Bearer",
+        scheme: "Bearer",
+        type: "http",
+        in: "Header",
+      },
+      "accessToken",
+    )
+    .build();
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup("api/docs", app, document);
+  // }
 
   app.connectMicroservice({
     transport: Transport.RMQ,

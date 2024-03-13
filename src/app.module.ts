@@ -20,7 +20,7 @@ import { UsersModule } from "./users/users.module";
 import { config, configValidationSchema } from "./utils/config/config";
 import { DatabaseConfig } from "./utils/config/database.config";
 import { LANGUAGE, NODE_ENV } from "./utils/constant/constant";
-import { AnyExceptionFilter } from "./utils/exception/http.exception";
+import { AllExceptionsFilter } from "./utils/exception/http.exception";
 import { VersionsModule } from "./versions/versions.module";
 import { CacheModule } from "@nestjs/cache-manager";
 import { LoggerModule } from "nestjs-pino";
@@ -28,9 +28,9 @@ import { AppController } from "./app.controller";
 
 @Module({
   imports: [
-    ServeStaticModule.forRoot({
-      rootPath: join(__dirname, "..", "public"),
-    }),
+    // ServeStaticModule.forRoot({
+    //   rootPath: join(__dirname, "..", "public"),
+    // }),
     ConfigModule.forRoot({
       validationSchema: configValidationSchema,
       isGlobal: true,
@@ -91,7 +91,7 @@ import { AppController } from "./app.controller";
   providers: [
     {
       provide: APP_FILTER,
-      useClass: AnyExceptionFilter,
+      useClass: AllExceptionsFilter,
     },
     UsersGateway,
     SessionsGateway,

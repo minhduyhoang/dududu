@@ -1,0 +1,17 @@
+{
+  "apps": [
+    {
+      "name": "prod",
+      "script": "./dist/main.js",
+      "instances": "max",
+      "ignore_watch": ["node_modules", "public", "\\.git", "*.log"],
+      "max_memory_restart": "900M",
+      "exec_mode": "cluster",
+      "env": {
+        "NODE_ENV": "prod",
+        "PORT": "3009"
+      },
+      "node_args": ["--max_old_space_size=4096"]
+    }
+  ]
+}

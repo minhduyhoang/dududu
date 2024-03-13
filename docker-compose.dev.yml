@@ -3,7 +3,10 @@ services:
   app:
     container_name: '${CONTAINER_NAME}'
     restart: always
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: dev
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
