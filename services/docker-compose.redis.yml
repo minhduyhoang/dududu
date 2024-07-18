@@ -2,7 +2,7 @@ version: '3.2'
 services:
   redis:
     container_name: dududu-redis
-    restart: on-failure
+    restart: always
     image: redis:6.0.8
     ports:
       - '${REDIS_PORT}:6379'

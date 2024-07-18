@@ -2,7 +2,7 @@ version: '3.2'
 services:
   rabbitmq:
     container_name: dududu-rabbitmq
-    restart: on-failure
+    restart: always
     image: rabbitmq:3-management
     ports:
       - '${RABBIT_UI_PORT}:15672'

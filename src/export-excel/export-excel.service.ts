@@ -7,6 +7,9 @@ import * as moment from "moment-timezone";
 export class ExportExcelService {
   private border: any;
   private numberFormat: any;
+  private doubleFormat: any;
+  private usdFormat: any;
+  private percentFormat: any;
   private bgStyle: any;
   private stringFormat: any;
   constructor() {
@@ -40,6 +43,23 @@ export class ExportExcelService {
 
     this.numberFormat = {
       numberFormat: "#,##0; -#,##0; 0",
+    };
+
+    this.doubleFormat = {
+      numberFormat: "#,##0.00; -#,##0.00; 0",
+    };
+
+    this.usdFormat = {
+      numberFormat: "$#,##0.00;-$#,##0.00; $0",
+    };
+
+    this.percentFormat = {
+      font: {
+        color: '#000000',
+        name: '맑은 고딕',
+        size: 10,
+      },
+      numberFormat: '#%; -#%; -',
     };
 
     this.bgStyle = {
@@ -77,6 +97,15 @@ export class ExportExcelService {
     );
     const styleNumber = wb.createStyle(
       Object.assign(this.numberFormat, this.bgStyle, this.border),
+    );
+    const styleDouble = wb.createStyle(
+      Object.assign(this.doubleFormat, this.bgStyle, this.border),
+    );
+    const styleUSD = wb.createStyle(
+      Object.assign(this.usdFormat, this.bgStyle, this.border),
+    );
+    const percentFormat = wb.createStyle(
+      Object.assign(this.percentFormat, this.bgStyle, this.border),
     );
 
     const TOTAL_COLUMNS = headers.length;

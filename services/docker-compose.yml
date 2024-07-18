@@ -12,7 +12,7 @@ services:
       - '${POSTGRES_PORT}:5432'
   redis:
     container_name: dududu-redis
-    restart: on-failure
+    restart: always
     image: redis:6.0.8
     ports:
       - '${REDIS_PORT}:6379'
@@ -21,7 +21,7 @@ services:
     command: "redis-server --requirepass ${REDIS_PASSWORD}"
   rabbitmq:
     container_name: dududu-rabbitmq
-    restart: on-failure
+    restart: always
     image: rabbitmq:3-management
     ports:
       - '${RABBIT_UI_PORT}:15672'

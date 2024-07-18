@@ -139,4 +139,60 @@ export class FirebaseService {
         console.error(error);
       });
   }
+
+  public async revoke(uid: string) {
+    try {
+      return firebaseAdmin
+        .auth()
+        .revokeRefreshTokens(uid)
+        .then(() => {
+          return firebaseAdmin.auth().getUser(uid);
+        })
+        .then((userRecord) => {
+          return new Date(userRecord.tokensValidAfterTime).getTime() / 1000;
+        })
+        .then((timestamp) => {
+          console.log(`Tokens revoked at: ${timestamp}`);
+        });
+    } catch (error) {
+      console.log("GOOGLE REVOKE FAIL: ", error);
+    }
+  }
+
+  public async verifyPhoneNumber(token: string): Promise<any> {
+    try {
+      const firebaseUser: any = await firebaseAdmin
+        .auth()
+        .verifyIdToken(token, true)
+        .catch((error) => {
+          console.log("GOOGLE VERIFY FAIL: ", error);
+          return false;
+        });
+
+      if (!firebaseUser) {
+        return false;
+      }
+
+      return firebaseUser;
+    } catch (error) {
+      console.log("GOOGLE VERIFY FAIL: ", error);
+      return false;
+    }
+  }
+
+  public async deleteUser(uid: string): Promise<void> {
+    try {
+      await firebaseAdmin
+        .auth()
+        .deleteUser(uid)
+        .then(() => {
+          console.log("Successfully deleted user");
+        })
+        .catch((error) => {
+          console.log("Error deleting user:", error);
+        });
+    } catch (error) {
+      console.log("Error deleting user:", error);
+    }
+  }
 }

@@ -10,7 +10,9 @@ import {
 } from "typeorm";
 
 export class BaseEntityCustom extends BaseEntity {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn({
+    unsigned: true,
+  })
   id: number;
 
   @Index("uuid", { unique: true })

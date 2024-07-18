@@ -9,6 +9,7 @@ import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 import { NODE_ENV } from "./utils/constant/constant";
 import { NestExpressApplication } from "@nestjs/platform-express";
 import { join } from "path";
+import { WriteLogs } from "./utils/common/common";
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -34,10 +35,11 @@ async function bootstrap() {
   app.setGlobalPrefix("api");
   app.setBaseViewsDir(join(__dirname, "views"));
   app.setViewEngine("hbs");
+  app.enable(new WriteLogs());
 
   app.use("/app", async (req, res) => {
     try {
-      // res.redirect(`diggin://app${req.url}`);
+      // res.redirect(`appname://app${req.url}`);
       res.render("app", {});
     } catch (err) {
       console.log("err app", err);
@@ -54,8 +56,8 @@ async function bootstrap() {
 
   // if (process.env.NODE_ENV !== NODE_ENV.PRODUCTION) {
   const config = new DocumentBuilder()
-    .setTitle("DIGGIN APIs")
-    .setDescription("DIGGIN APIs")
+    .setTitle("APIs")
+    .setDescription("APIs")
     .setVersion("1.0")
     .addBearerAuth(
       {
